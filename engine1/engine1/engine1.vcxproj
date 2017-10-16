@@ -111,10 +111,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameLogicSystem.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Message.cpp" />
+    <ClCompile Include="MessageBus.cpp" />
+    <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="System.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameLogicSystem.h" />
+    <ClInclude Include="InputSystem.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="Message.h" />
+    <ClInclude Include="MessageBus.h" />
+    <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="System.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

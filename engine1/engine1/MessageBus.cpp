@@ -1,22 +1,30 @@
+#include "main.h"
 #include "MessageBus.h"
-
-
 
 MessageBus::MessageBus()
 {
+	this->size = 0;
+	messages = (Message*)calloc(16, sizeof(Message));
 }
 
-
-MessageBus::~MessageBus()
+MessageBus::MessageBus(int size)
 {
+	this->size = 0;
+	messages = (Message*)calloc(size, sizeof(Message));
 }
 
-int MessageBus::postMessage()
+void MessageBus::post(Message msg)
 {
-	return 0;
+	messages[this->size] = msg;
+	this->size++;
 }
 
-int MessageBus::readMessage()
+Message * MessageBus::access()
 {
-	return 0;
+	return messages;
+}
+
+int MessageBus::getSize()
+{
+	return this->size;
 }

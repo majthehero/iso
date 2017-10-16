@@ -6,12 +6,14 @@ class MessageBus
 {
 public:
 	MessageBus();
-	~MessageBus();
+	MessageBus(int size);
 
-	int postMessage();
-	int readMessage();
+	void post(Message msg);
+	
+	Message* access();
+	int getSize();
 
 private:
-	Message msgStack[];
+	Message* messages;
+	int size = 0;
 };
-

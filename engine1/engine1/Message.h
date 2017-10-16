@@ -4,13 +4,8 @@
 class Message
 {
 public:
-	Message();
-	~Message();
-
-private:
-	SYSTEMS receiver;
-	SYSTEMS sender;
-	
+	int command;
+	int destSystem;
 };
 
 
