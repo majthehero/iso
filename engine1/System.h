@@ -58,6 +58,7 @@ public:
 
 
 /* GAME SYSTEM */
+// allowed to write to WORLD_ACCESS
 class GameSystem : public System, public WORLD_ACCESS
 {
 public:
@@ -70,6 +71,7 @@ public:
 
 
 /* RENDER SYSTEM */
+// WORLD_ACCESS should be used read only until write access is locked
 class RenderSystem : public System, public WORLD_ACCESS
 {
 public:
