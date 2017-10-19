@@ -75,3 +75,12 @@ public:
 	const WorldMap& getMap();
 };
 
+
+// for SYSTEMS
+class WORLD_ACCESS {
+protected:
+	World* world;  // !todo: replace pointer with something a bit smarter
+public:
+	void assignWorld(World* w);
+
+};

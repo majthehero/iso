@@ -77,3 +77,8 @@ void WorldMap::render()
 		}
 	}
 }
+
+void WORLD_ACCESS::assignWorld(World* w)
+{
+	world = w;
+}

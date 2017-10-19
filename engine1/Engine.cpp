@@ -31,9 +31,10 @@ int main()
 	// load systems
 	InputSystem inputSystem(messageBus);
 	GameSystem gameSystem(messageBus);
+	gameSystem.assignWorld(&world);
 	RenderSystem renderSystem(messageBus);
-
-
+	renderSystem.assignWorld(&world);
+	
 	// game loop
 	while (true)
 	{

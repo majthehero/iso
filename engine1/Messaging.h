@@ -40,11 +40,9 @@ public:
 	~Message();
 
 	void mark_remove();
-
-	SYSTEM getDest() {
-		if (remove) return SYS_ERROR;
-		return dest;
-	}
+	void setDest(SYSTEM destSys);
+	SYSTEM getDest();
+	void setComm(COMMAND comm);
 	COMMAND getCommand();
 	bool shouldRemove();
 

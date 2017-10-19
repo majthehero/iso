@@ -17,6 +17,22 @@ void Message::mark_remove()
 	remove = true;
 }
 
+void Message::setDest(SYSTEM destSys)
+{
+	dest = destSys;
+}
+
+SYSTEM Message::getDest()
+{
+	if (remove) return SYS_ERROR;
+	return dest;
+}
+
+void Message::setComm(COMMAND comm)
+{
+	command = comm;
+}
+
 COMMAND Message::getCommand()
 {
 	if (remove) return CMD_ERROR;
