@@ -1,9 +1,6 @@
 #pragma once
 
-#define DEBUG_WIDTH 960
-#define DEBUG_HEIGHT 540
-
-#define TILE_SIZE 64
+#include "Camera.h"
 
 class Renderable
 {
@@ -11,6 +8,7 @@ public:
 	Renderable();
 	~Renderable();
 
-	virtual void render() = 0;
+	virtual void render(Camera* camP) = 0;
+
 };
 

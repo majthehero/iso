@@ -12,16 +12,7 @@
 #include <allegro5\allegro_image.h>
 
 #include "Renderable.h"
-
-// Position !todo move to a different file
-class Position {
-public:
-	float x;
-	float y;	
-	Position();
-	Position(float x, float y);
-	void add(Position p);
-} ;
+#include "Util.h"
 
 // WorldTile
 
@@ -51,7 +42,6 @@ class WorldMap : public Renderable
 private:
 	std::array<WorldTile, MAP_SIZE> world_map; // !hardcode: size def
 	std::vector<ALLEGRO_BITMAP*> assets; // !slow? wanted contigous memory
-	
 public:
 	WorldMap();
 	~WorldMap();
@@ -62,8 +52,8 @@ public:
 
 	std::vector<ALLEGRO_BITMAP*>& getAssets();
 
-	// Inherited via Renderable
-	virtual void render() override;
+	// inherited from Renderable
+	virtual void render(Camera* camP);
 
 };
 
@@ -74,12 +64,14 @@ class World
 {
 private:
 	WorldMap worldMap;
-
+	Camera camera;
 public:
 	World();
 	~World();
 
 	WorldMap& getMap();
+	Camera* getCamera();
+
 };
 
 

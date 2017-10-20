@@ -103,6 +103,7 @@ void GameSystem::update()
 	// prepare message
 	Message msg;
 	messages->temp.clear();
+	Position move;
 
 	// read messages
 	/*std::vector<Message>::iterator iBegin = messages->getIterator();
@@ -113,16 +114,32 @@ void GameSystem::update()
 		if (p.first->getDest() == SYS_GAME) {
 			switch (p.first->getCommand()) {
 			case CMD_UP:
-				cerr << "_^_\n";
+				cerr << "move_camera_^_\n";
+				move.x = 0;
+				move.y = -15;
+				world->getCamera()->move(move);
 				break;
 			case CMD_DOWN:
-				cerr << "-v-\n";
+				cerr << "move_camera-v-\n";
+				move.x = 0;
+				move.y = 15;
+				world->getCamera()->move(move);
 				break;
 			case CMD_LEFT:
-				cerr << "<--\n";
+				cerr << "move_camera<--\n";
+				move.x = -15;
+				move.y = 0;
+				world->getCamera()->move(move);
 				break;
 			case CMD_RIGHT:
-				cerr << "-->\n";
+				cerr << "move_camera-->\n";
+				move.x = 15;
+				move.y = 0;
+				world->getCamera()->move(move);
+				break;
+			case CMD_ACTION:
+				cerr << "action, zoom out\n";
+				world->getCamera()->scale += 0.1;
 				break;
 			case CMD_LCLICK:
 				msg.setDest(SYS_RENDER);
@@ -131,7 +148,8 @@ void GameSystem::update()
 				cerr << "click, render request prepared\n";
 				break;
 			case CMD_RCLICK:
-				cerr << "right click, fuck you\n";
+				cerr << "right click, zoom in\n";
+				world->getCamera()->scale -= 0.1;
 				break;
 			}
 			p.first->mark_remove();
@@ -162,30 +180,14 @@ RenderSystem::~RenderSystem()
 {
 }
 
-void RenderSystem::render() // !todo after resolving World::render()
-							// this function needs only call all Renderable::render()
+void RenderSystem::render()
 {
-	Position pos{ 0,0 };
-	/*std::pair<std::array<WorldTile, MAP_SIZE>::iterator,
-		std::array<WorldTile, MAP_SIZE>::iterator> p = world->getMap().getMapIterators();*/
-	// !slow: this should use iterators to get tiles faster
-	auto& assets = world->getMap().getAssets();
-	/*for (; p.first != p.second; p.first++)
-	{*/
-	int i, j;
-	for (i = 0, pos.y = 0; pos.y < DEBUG_HEIGHT; i++, pos.y += TILE_SIZE)
-	{
-		for (j = 0, pos.x = 0; pos.x < DEBUG_WIDTH; j++, pos.x += TILE_SIZE)
-		{
-			WorldTile wt = world->getMap().getTile(j, i);
-			al_draw_bitmap(
-				assets.at(wt.type),
-				pos.x,
-				pos.y,
-				NULL);
-		}
-	}
+	LOG("Start render");
+	al_clear_to_color(al_map_rgb(0, 15, 10));
 
+	world->getMap().render(world->getCamera());
+	
+	LOG("Ended render");
 	al_flip_display(); // must be called at the end of render step
 }
 
@@ -195,11 +197,13 @@ void RenderSystem::update()
 	auto iEnd = messages->iteratorEnd();
 	for ( ; iBegin != iEnd; iBegin++) 
 	{
+		if (iBegin->shouldRemove()) continue;
 		if (iBegin->getDest() == SYS_RENDER) 
 		{
 			if (iBegin->getCommand() == CMD_RENDER) 
 			{
 				render();
+				iBegin->mark_remove();
 			}
 			else 
 			{
@@ -208,3 +212,4 @@ void RenderSystem::update()
 		}
 	}
 }
+;

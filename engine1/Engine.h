@@ -9,7 +9,9 @@
 #include <allegro5\allegro_primitives.h>
 #include <allegro5\allegro_image.h>
 
-#include "Renderable.h"
+#include "System.h"
+#include "World.h"
+#include "Messaging.h"
 
 class Engine
 {

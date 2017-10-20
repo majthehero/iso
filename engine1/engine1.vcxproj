@@ -133,6 +133,7 @@
     <ClInclude Include="Messaging.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="System.h" />
+    <ClInclude Include="Util.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +142,7 @@
     <ClCompile Include="Messaging.cpp" />
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="System.cpp" />
+    <ClCompile Include="Util.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -1,9 +1,11 @@
 #include "World.h"
 
-
+#include "debug.h"
 
 World::World()
 {
+	// init camera
+	camera.setPosition(0.0f, 0.0f);
 }
 
 
@@ -14,6 +16,11 @@ World::~World()
 WorldMap& World::getMap()
 {
 	return worldMap;
+}
+
+Camera * World::getCamera()
+{
+	return &camera; // !todo: replace pointer
 }
 
 WorldMap::WorldMap()
@@ -36,6 +43,7 @@ WorldMap::WorldMap()
 		//std::cerr << "Generated tile." << wt.type << "\n";
 	}
 	std::cerr << "Generated map.\n";
+	
 }
 
 WorldMap::~WorldMap()
@@ -65,22 +73,45 @@ std::vector<ALLEGRO_BITMAP*>& WorldMap::getAssets()
 	return assets;
 }
 
-void WorldMap::render() // !todo: replace with code from RenderSystem::render()
+void WorldMap::render(Camera* camP) 
 {
-	Position tilePos = { 0, 0 };
-	for (auto wt : world_map) {
-		if (tilePos.x + TILE_SIZE > DEBUG_WIDTH) continue; // !hardcoded: blargh
-		if (tilePos.y + TILE_SIZE > DEBUG_WIDTH) continue;
+	Position pos{ 0,0 };
+	// !slow: loops should be replaced with some real interator magic
+	auto p = camP->getMemCoords(); // <<xBeg, xEnd>, <yBeg, yEnd>>
+	int iBegin = p.first.first; 
+	int iEnd = p.first.second;
+	int jBegin = p.second.first;
+	int jEnd = p.second.second;
+	
+	Position itemPos(0.0f, 0.0f);
 
-		al_draw_bitmap(
-			assets.at(wt.type),
-			tilePos.x,
-			tilePos.y,
-			NULL);
-		tilePos.x++;
-		if (tilePos.x == MAP_ROW - 1) {
-			tilePos.x = 0;
-			tilePos.y++;
+	for ( ; jBegin < jEnd; jBegin++ )
+	{
+		for ( iBegin = p.second.first; iBegin < iEnd; iBegin++ ) // reset on new row
+		{
+		
+			if (jBegin < 0 || jBegin > MAP_SIZE / MAP_ROW) continue; // out of mem, don't draw
+			if (iBegin < 0 || iBegin > MAP_ROW) continue; // out of mem, don't draw
+		
+			WorldTile wt = getTile(iBegin, jBegin);
+			float srcScale = TILE_SIZE;
+			float destScale = TILE_SIZE * camP->getScale();
+		
+			itemPos.x = iBegin;
+			itemPos.y = jBegin;
+
+			pos = camP->getScreenCoords(&itemPos);
+			
+			std::cerr << "posx= " << pos.x << std::endl;
+			std::cerr << "posy= " << pos.y << std::endl;
+
+			al_draw_scaled_bitmap(
+				assets.at(wt.type),		// bitmap
+				0, 0,					// src xy
+				srcScale, srcScale,		// src scale
+				pos.x, pos.y,			// dest xy
+				destScale, destScale,	// dest scale
+				NULL);
 		}
 	}
 }
@@ -90,20 +121,3 @@ void WORLD_ACCESS::assignWorld(World* w)
 	world = w;
 }
 
-Position::Position()
-{
-	x = 0;
-	y = 0;
-}
-
-Position::Position(float x, float y)
-{
-	x = x;
-	y = y;
-}
-
-void Position::add(Position p)
-{
-	x += p.x;
-	y += p.y;
-}

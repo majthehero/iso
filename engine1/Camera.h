@@ -2,7 +2,7 @@
 
 #include<map>
 
-#include "World.h"
+#include "Util.h"
 
 class Camera
 {
@@ -17,11 +17,12 @@ public:
 		position.add(deltaPos);
 	}
 
-	std::pair<int, int> getMemCoords() {
-		// !todo: IMPORTANT document how it works!
-		// !todo: FIGOURE OUT how it works!
-	}
+	std::pair<std::pair<int, int>, std::pair<int, int>> getMemCoords();
 
+	float getScale();
+	Position getScreenCoords(Position* itemPos);
+
+	void setPosition(float x, float y);
 	
 
 };
