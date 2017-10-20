@@ -17,6 +17,7 @@ Engine::~Engine()
 int main()
 {
 	// init allegro
+
 	al_init();
 	al_install_keyboard();
 	al_install_mouse();
@@ -29,10 +30,10 @@ int main()
 	MessageBus messageBus;
 	World world;
 	// load systems
-	InputSystem inputSystem(messageBus);
-	GameSystem gameSystem(messageBus);
+	InputSystem inputSystem(&messageBus);
+	GameSystem gameSystem(&messageBus);
 	gameSystem.assignWorld(&world);
-	RenderSystem renderSystem(messageBus);
+	RenderSystem renderSystem(&messageBus);
 	renderSystem.assignWorld(&world);
 	
 	// game loop

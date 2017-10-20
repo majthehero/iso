@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include <array>
 #include <vector>
 
@@ -12,10 +14,14 @@
 #include "Renderable.h"
 
 // Position !todo move to a different file
-typedef struct {
+class Position {
+public:
 	float x;
 	float y;	
-} Position;
+	Position();
+	Position(float x, float y);
+	void add(Position p);
+} ;
 
 // WorldTile
 
@@ -51,9 +57,10 @@ public:
 	~WorldMap();
 
 	WorldTile& getTile(int x, int y);
-	std::array<WorldTile, MAP_SIZE>::iterator getMapBegin();
-	std::array<WorldTile, MAP_SIZE>::iterator getMapEnd();
+	std::pair<std::array<WorldTile, MAP_SIZE>::iterator,
+		std::array<WorldTile, MAP_SIZE>::iterator> getMapIterators();
 
+	std::vector<ALLEGRO_BITMAP*>& getAssets();
 
 	// Inherited via Renderable
 	virtual void render() override;
@@ -72,7 +79,7 @@ public:
 	World();
 	~World();
 
-	const WorldMap& getMap();
+	WorldMap& getMap();
 };
 
 

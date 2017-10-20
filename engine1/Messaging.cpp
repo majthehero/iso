@@ -79,6 +79,15 @@ std::vector<Message>::iterator MessageBus::getIterator()
 	return messages.begin();
 }
 
+std::pair<std::vector<Message>::iterator, std::vector<Message>::iterator> MessageBus::getIterators() 
+{
+	std::pair<std::vector<Message>::iterator, std::vector<Message>::iterator> p;
+	p.first = messages.begin();
+	p.second = messages.end();
+
+	return p;
+}
+
 std::vector<Message>::iterator MessageBus::iteratorEnd()
 {
 	return messages.end();

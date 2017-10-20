@@ -15,7 +15,7 @@
 class System
 {
 protected:
-	MessageBus messages;
+	MessageBus* messages;
 public:
 	System();
 	~System();
@@ -49,7 +49,7 @@ private:
 	ALLEGRO_EVENT event;
 	ALLEGRO_EVENT_QUEUE* eventQueue;
 public:
-	InputSystem(MessageBus& msgBus);
+	InputSystem(MessageBus* msgBus);
 	~InputSystem();
 
 	// Inherited via System
@@ -62,7 +62,7 @@ public:
 class GameSystem : public System, public WORLD_ACCESS
 {
 public:
-	GameSystem(MessageBus& msgBus);
+	GameSystem(MessageBus* msgBus);
 	~GameSystem();
 
 	// Inherited via System
@@ -74,9 +74,14 @@ public:
 // WORLD_ACCESS should be used read only until write access is locked
 class RenderSystem : public System, public WORLD_ACCESS
 {
+private:
+	int width, height;
+	ALLEGRO_DISPLAY* display;
 public:
-	RenderSystem(MessageBus& msgBus);
+	RenderSystem(MessageBus* msgBus);
 	~RenderSystem();
+
+	void render();
 
 	// Inherited via System
 	virtual void update() override;

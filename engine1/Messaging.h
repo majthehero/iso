@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <map>
 
 enum SYSTEM {
 	SYS_MSGBUS = 0,
@@ -52,13 +53,18 @@ class MessageBus
 {
 private:
 	std::vector<Message> messages;
+	
 public:
+	std::vector<Message> temp;
+	
 	MessageBus();
 	~MessageBus();
 
 	void post(Message msg);
 	void removeMarked();
 	std::vector<Message>::iterator getIterator();
+	std::pair<std::vector<Message>::iterator,
+		std::vector<Message>::iterator> getIterators();
 	std::vector<Message>::iterator iteratorEnd();
 };
 

@@ -11,7 +11,7 @@ World::~World()
 {
 }
 
-const WorldMap& World::getMap()
+WorldMap& World::getMap()
 {
 	return worldMap;
 }
@@ -33,7 +33,9 @@ WorldMap::WorldMap()
 	int tilecount = 0;
 	for (WorldTile wt : world_map) {
 		wt.type = static_cast<WORLD_TILE_TYPE>((tilecount++ / 3) % 4);
+		//std::cerr << "Generated tile." << wt.type << "\n";
 	}
+	std::cerr << "Generated map.\n";
 }
 
 WorldMap::~WorldMap()
@@ -48,22 +50,27 @@ WorldTile & WorldMap::getTile(int x, int y)
 	return world_map.at(x + MAP_ROW * y);
 }
 
-std::array<WorldTile, MAP_SIZE>::iterator WorldMap::getMapBegin()
+std::pair<std::array<WorldTile, MAP_SIZE>::iterator, std::array<WorldTile, MAP_SIZE>::iterator> WorldMap::getMapIterators()
 {
-	return world_map.begin();
+	std::pair<std::array<WorldTile, MAP_SIZE>::iterator,
+		std::array<WorldTile, MAP_SIZE>::iterator> p;
+	p.first = world_map.begin();
+	p.second = world_map.end();
+	return p;
 }
 
-std::array<WorldTile, MAP_SIZE>::iterator WorldMap::getMapEnd()
+
+std::vector<ALLEGRO_BITMAP*>& WorldMap::getAssets()
 {
-	return world_map.end();
+	return assets;
 }
 
-void WorldMap::render()
+void WorldMap::render() // !todo: replace with code from RenderSystem::render()
 {
 	Position tilePos = { 0, 0 };
 	for (auto wt : world_map) {
-		if (tilePos.x + 64 > 960) continue;
-		if (tilePos.y + 64 > 540) continue;
+		if (tilePos.x + TILE_SIZE > DEBUG_WIDTH) continue; // !hardcoded: blargh
+		if (tilePos.y + TILE_SIZE > DEBUG_WIDTH) continue;
 
 		al_draw_bitmap(
 			assets.at(wt.type),
@@ -81,4 +88,22 @@ void WorldMap::render()
 void WORLD_ACCESS::assignWorld(World* w)
 {
 	world = w;
+}
+
+Position::Position()
+{
+	x = 0;
+	y = 0;
+}
+
+Position::Position(float x, float y)
+{
+	x = x;
+	y = y;
+}
+
+void Position::add(Position p)
+{
+	x += p.x;
+	y += p.y;
 }
