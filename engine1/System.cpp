@@ -29,7 +29,7 @@ InputSystem::InputSystem(MessageBus* msgBus)
 	key_lut.key_right = ALLEGRO_KEY_D;
 	mouse_lut.mouseL = 1;
 	mouse_lut.mouseR = 3;
-	LOG("InputSystem online" );
+
 }
 
 
@@ -38,7 +38,7 @@ InputSystem::~InputSystem()
 	al_unregister_event_source(eventQueue, al_get_keyboard_event_source());
 	al_unregister_event_source(eventQueue, al_get_mouse_event_source());
 	al_destroy_event_queue(eventQueue);
-	LOG("InputSystem offline");
+
 }
 
 void InputSystem::update()
@@ -50,7 +50,7 @@ void InputSystem::update()
 	while (al_get_next_event(eventQueue, &event)) 
 	{
 		if (event.type == ALLEGRO_EVENT_KEY_CHAR) {
-			LOG("input::update::event.key");
+
 			if (event.keyboard.keycode == key_lut.key_down) {
 				msg.setComm(CMD_DOWN);
 			} 
@@ -88,13 +88,13 @@ void InputSystem::update()
 GameSystem::GameSystem(MessageBus* msgBus)
 {
 	messages = msgBus;
-	LOG("GameSystem online");
+	
 }
 
 
 GameSystem::~GameSystem()
 {
-	LOG("GameSystem offline");
+	
 }
 
 void GameSystem::update()
@@ -103,7 +103,7 @@ void GameSystem::update()
 	// prepare message
 	Message msg;
 	messages->temp.clear();
-	Position move;
+	WorldPosition move;
 
 	// read messages
 	/*std::vector<Message>::iterator iBegin = messages->getIterator();
@@ -111,35 +111,37 @@ void GameSystem::update()
 	std::pair < std::vector<Message>::iterator,
 		std::vector<Message>::iterator> p = messages->getIterators();
 	for (; p.first != p.second; p.first++) {
+		if (p.first->shouldRemove()) continue;
 		if (p.first->getDest() == SYS_GAME) {
 			switch (p.first->getCommand()) {
 			case CMD_UP:
 				cerr << "move_camera_^_\n";
 				move.x = 0;
-				move.y = -15;
+				move.y = -0.333;
 				world->getCamera()->move(move);
 				break;
 			case CMD_DOWN:
 				cerr << "move_camera-v-\n";
 				move.x = 0;
-				move.y = 15;
+				move.y = 0.333;
 				world->getCamera()->move(move);
 				break;
 			case CMD_LEFT:
 				cerr << "move_camera<--\n";
-				move.x = -15;
+				move.x = -0.333;
 				move.y = 0;
 				world->getCamera()->move(move);
 				break;
 			case CMD_RIGHT:
 				cerr << "move_camera-->\n";
-				move.x = 15;
+				move.x = 0.333;
 				move.y = 0;
 				world->getCamera()->move(move);
 				break;
 			case CMD_ACTION:
-				cerr << "action, zoom out\n";
-				world->getCamera()->scale += 0.1;
+				cerr << "action, zoom in\n";
+				world->getCamera()->setScale(
+					world->getCamera()->getScale() + 0.333);
 				break;
 			case CMD_LCLICK:
 				msg.setDest(SYS_RENDER);
@@ -148,8 +150,9 @@ void GameSystem::update()
 				cerr << "click, render request prepared\n";
 				break;
 			case CMD_RCLICK:
-				cerr << "right click, zoom in\n";
-				world->getCamera()->scale -= 0.1;
+				cerr << "right click, zoom out\n";
+				world->getCamera()->setScale(
+					world->getCamera()->getScale() - 0.333);
 				break;
 			}
 			p.first->mark_remove();
@@ -173,6 +176,7 @@ RenderSystem::RenderSystem(MessageBus* msgBus)
 	width = 960;
 	height = 540;
 	display = al_create_display(width, height);
+	al_load_font("RobotoCondensed-Light.tff", 16, NULL);
 }
 
 
@@ -182,12 +186,10 @@ RenderSystem::~RenderSystem()
 
 void RenderSystem::render()
 {
-	LOG("Start render");
 	al_clear_to_color(al_map_rgb(0, 15, 10));
 
 	world->getMap().render(world->getCamera());
 	
-	LOG("Ended render");
 	al_flip_display(); // must be called at the end of render step
 }
 

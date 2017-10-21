@@ -12,6 +12,7 @@
 #include "World.h"
 #include "Camera.h"
 #include "Util.h"
+#include "RenderableObject.h"
 
 
 class System
@@ -79,7 +80,7 @@ class RenderSystem : public System, public WORLD_ACCESS
 private:
 	int width, height;
 	ALLEGRO_DISPLAY* display;
-	
+	ALLEGRO_FONT* base_font;
 public:
 	RenderSystem(MessageBus* msgBus);
 	~RenderSystem();

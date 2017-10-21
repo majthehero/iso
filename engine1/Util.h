@@ -5,11 +5,20 @@
 
 #define TILE_SIZE 64
 
-class Position {
+class WorldPosition {
 public:
 	float x;
 	float y;
-	Position();
-	Position(float x, float y);
-	void add(Position p);
+	WorldPosition();
+	WorldPosition(float x, float y);
+	void add(WorldPosition p);
+};
+
+class ScreenPosition {
+public:
+	float x;
+	float y;
+	ScreenPosition();
+	ScreenPosition(float x, float y);
+	void add(WorldPosition p);
 };

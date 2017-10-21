@@ -1,9 +1,23 @@
 #pragma once
 
+#include <iostream>
+#include <fstream>
+#include <string>
+
 #define DEBUG
 
-#ifdef DEBUG
-#define LOG( F )  std::cerr << F << std::endl 
-#else
-#define LOG( F ) ;;
-#endif
+class Debug {
+private:
+	std::string file_name;
+	std::ofstream file;
+
+public:
+	Debug();
+	~Debug();
+
+	static void logCameraTransformation(
+		float x1, float y1,
+		float x2, float y2);
+
+
+};

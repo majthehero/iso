@@ -1,9 +1,11 @@
 #pragma once
 
 #include <iostream>
+#include <fstream>
 
 #include <array>
 #include <vector>
+#include <string>
 
 #include <allegro5\allegro.h>
 #include <allegro5\allegro_font.h>
@@ -11,7 +13,7 @@
 #include <allegro5\allegro_primitives.h>
 #include <allegro5\allegro_image.h>
 
-#include "Renderable.h"
+#include "RenderableObject.h"
 #include "Util.h"
 
 // WorldTile
@@ -34,25 +36,28 @@ public:
 
 
 // WorldMap
-#define MAP_ROW 128
-#define MAP_SIZE (128*128)
 
-class WorldMap : public Renderable
+class WorldMap : public RenderableObject
 {
 private:
-	std::array<WorldTile, MAP_SIZE> world_map; // !hardcode: size def
+	int size_x;
+	int size_y;
+	std::string path_to_map;
+	std::vector<WorldTile> world_map; 
 	std::vector<ALLEGRO_BITMAP*> assets; // !slow? wanted contigous memory
+	void loadMap();
 public:
 	WorldMap();
+	WorldMap(std::string pathToMap);
 	~WorldMap();
 
 	WorldTile& getTile(int x, int y);
-	std::pair<std::array<WorldTile, MAP_SIZE>::iterator,
-		std::array<WorldTile, MAP_SIZE>::iterator> getMapIterators();
+	std::pair<std::vector<WorldTile>::iterator,
+		std::vector<WorldTile>::iterator> getMapIterators();
 
 	std::vector<ALLEGRO_BITMAP*>& getAssets();
 
-	// inherited from Renderable
+	// inherited from RenderableObject
 	virtual void render(Camera* camP);
 
 };

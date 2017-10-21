@@ -15,27 +15,26 @@ Camera::~Camera()
 
 /*
 returns: pair<pair<int, int>pair<int, int>>: xMin, xMax, yMin, yMax
+// !slow: loops should be replaced with some real interator magic
 */
 std::pair<std::pair<int, int>, std::pair<int, int>> Camera::getMemCoords()
 {
-	int x1 = 0;
-	int x2 = 0;
-	int y1 = 0;
-	int y2 = 0;
-	int xNum = 0;
-	int yNum = 0;
+	// worldspace frustum size from scale
+	float frustum_x_size = DEBUG_WIDTH / (TILE_SIZE * scale);
+	float frustum_y_size = DEBUG_HEIGHT / (TILE_SIZE * scale);
 	
-	// scale
-	float relTileSize = (TILE_SIZE * scale);
-	xNum = ceil(DEBUG_WIDTH / relTileSize);
-	yNum = ceil(DEBUG_HEIGHT / relTileSize);
-	
-	// center on position
-	x1 = position.x / relTileSize - xNum / 2;
-	y1 = position.y / relTileSize - yNum / 2;
-	x2 = x1 + xNum;
-	y2 = y1 + xNum;
+	float frustumLeftEdge = position.x - frustum_x_size / 2;
+	float frustumRightEdge = position.x + frustum_x_size / 2;
 
+	float frustumUpperEdge = position.y - frustum_y_size / 2;
+	float frustumBottomEdge = position.y + frustum_y_size / 2;
+	
+	// round to larger area
+	int x1 = floor(frustumLeftEdge);
+	int x2 = ceil(frustumRightEdge);
+	int y1 = floor(frustumUpperEdge);
+	int y2 = ceil(frustumBottomEdge);
+		
 	std::pair<std::pair<int, int>, std::pair<int, int>> p;
 	std::pair<int, int> xBound(x1, x2);
 	std::pair<int, int> yBound(y1, y2);
@@ -51,28 +50,41 @@ float Camera::getScale()
 	return scale;
 }
 
+void Camera::setScale(float sc)
+{
+	scale = sc;
+}
+
 /*
 itemPos: position of item in world space - unit is tile
 returns: position of item in screen space - unit is pixel
 */
-Position Camera::getScreenCoords(Position* itemPosWSpace)
+ScreenPosition Camera::camera2dTransform(WorldPosition* itemPosWSpace)
 {
-	float sX = itemPosWSpace->x * TILE_SIZE - position.x;
-	float sY = itemPosWSpace->y * TILE_SIZE - position.y;
-	// recenter before scale
+	// both camera and item are in worldspace
+	float sX = itemPosWSpace->x - position.x;
+	float sY = itemPosWSpace->y - position.y;
+	// convert to screenspace - now sX is screen space modifier 
+	sX *= TILE_SIZE;
+	sY *= TILE_SIZE;
+	// center around 0,0 for scale
 	sX -= DEBUG_WIDTH / 2;
 	sY -= DEBUG_HEIGHT / 2;
 	// scale
 	sX *= scale;
 	sY *= scale;
-	// recenter after scale
-	sX += DEBUG_WIDTH / 2;
-	sY += DEBUG_HEIGHT / 2;
+	// recenter to middle of screen
+	sX += DEBUG_WIDTH;
+	sY += DEBUG_HEIGHT;
 
-	Position itemPosSSpace;
+	// return pair pair
+	ScreenPosition itemPosSSpace;
 	itemPosSSpace.x = sX;
 	itemPosSSpace.y = sY;
 
+	__dbg.logCameraTransformation(
+		itemPosWSpace->x, itemPosWSpace->y,
+		itemPosSSpace.x, itemPosSSpace.y);
 
 	return itemPosSSpace;
 }
