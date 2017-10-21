@@ -30,12 +30,14 @@ int main()
 	
 	// set up messaging and memory
 	MessageBus messageBus;
-	World world;
 	// load systems
 	InputSystem inputSystem(&messageBus);
 	GameSystem gameSystem(&messageBus);
-	gameSystem.assignWorld(&world);
+	// render system inits allegro
 	RenderSystem renderSystem(&messageBus);
+	// world needs allegro to construct itself
+	World world;
+	gameSystem.assignWorld(&world);
 	renderSystem.assignWorld(&world);
 	
 	// game loop

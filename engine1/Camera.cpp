@@ -1,5 +1,6 @@
 #include "Camera.h"
 
+#include "Util.h"
 
 
 Camera::Camera()
@@ -23,11 +24,11 @@ std::pair<std::pair<int, int>, std::pair<int, int>> Camera::getMemCoords()
 	float frustum_x_size = DEBUG_WIDTH / (TILE_SIZE * scale);
 	float frustum_y_size = DEBUG_HEIGHT / (TILE_SIZE * scale);
 	
-	float frustumLeftEdge = position.x - frustum_x_size / 2;
-	float frustumRightEdge = position.x + frustum_x_size / 2;
+	float frustumLeftEdge = world_position.x - frustum_x_size / 2;
+	float frustumRightEdge = world_position.x + frustum_x_size / 2;
 
-	float frustumUpperEdge = position.y - frustum_y_size / 2;
-	float frustumBottomEdge = position.y + frustum_y_size / 2;
+	float frustumUpperEdge = world_position.y - frustum_y_size / 2;
+	float frustumBottomEdge = world_position.y + frustum_y_size / 2;
 	
 	// round to larger area
 	int x1 = floor(frustumLeftEdge);
@@ -62,8 +63,8 @@ returns: position of item in screen space - unit is pixel
 ScreenPosition Camera::camera2dTransform(WorldPosition* itemPosWSpace)
 {
 	// both camera and item are in worldspace
-	float sX = itemPosWSpace->x - position.x;
-	float sY = itemPosWSpace->y - position.y;
+	float sX = itemPosWSpace->x - world_position.x;
+	float sY = itemPosWSpace->y - world_position.y;
 	// convert to screenspace - now sX is screen space modifier 
 	sX *= TILE_SIZE;
 	sY *= TILE_SIZE;
@@ -91,6 +92,6 @@ ScreenPosition Camera::camera2dTransform(WorldPosition* itemPosWSpace)
 
 void Camera::setPosition(float x, float y)
 {
-	position.x = x;
-	position.y = y;
+	world_position.x = x;
+	world_position.y = y;
 }

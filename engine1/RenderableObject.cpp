@@ -1,9 +1,17 @@
 #include "RenderableObject.h"
 
+ALLEGRO_BITMAP* RenderableObject::empty_sprite = NULL;
+ALLEGRO_FONT* RenderableObject::base_font = NULL;
+ALLEGRO_COLOR* RenderableObject::white = NULL;
+ALLEGRO_COLOR* RenderableObject::black = NULL;
+ALLEGRO_COLOR* RenderableObject::red   = NULL;
+ALLEGRO_COLOR* RenderableObject::green = NULL;
+ALLEGRO_COLOR* RenderableObject::blue  = NULL;
 
 
 RenderableObject::RenderableObject()
 {
+	empty_sprite = al_create_bitmap(64, 64);
 	al_set_target_bitmap(empty_sprite);
 	al_clear_to_color(al_map_rgba(0, 0, 0, 0));
 	al_set_target_bitmap(NULL);
@@ -40,7 +48,7 @@ void RenderableObject::render(Camera * camP)
 			itemPosSP.y,			//  y
 			destScale, destScale,	// dest scale
 			NULL);
-	if (flags.devel)
-		al_draw_text(base_font, );
+	//if (flags.devel)
+	//	al_draw_text(base_font, );
 		
 }

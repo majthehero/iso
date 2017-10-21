@@ -12,7 +12,7 @@ private:
 	/* manually init position */
 	// !todo: hide a copy to encapsulate and protect data
 	// !todo: correct constructors to auto init position to 0,0
-	WorldPosition position; 
+	WorldPosition world_position; 
 	float scale;
 public:
 	Camera();
@@ -21,7 +21,7 @@ public:
 	Debug __dbg;
 
 	void move(WorldPosition deltaPos) {
-		position.add(deltaPos);
+		world_position.add(deltaPos);
 	}
 
 	/* returns map bounds that camera can see */
@@ -38,7 +38,9 @@ public:
 
 	/* sets camera's position to x, y */
 	void setPosition(float x, float y);
-	
+	WorldPosition getWorldPosition() {
+		return world_position;
+	}
 
 };
 
