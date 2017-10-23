@@ -139,10 +139,6 @@ std::vector<ALLEGRO_BITMAP*>& WorldMap::getAssets()
 
 void WorldMap::render(Camera* camP) 
 {
-	/*std::cerr << "worldmap::render::camP->pos: " 
-		<< camP->getWorldPosition().x << " , " 
-		<< camP->getWorldPosition.y << std::endl;*/
-
 	ScreenPosition itemPosSP{ 0,0 };
 	// !slow: loops should be replaced with some real interator magic
 	auto p = camP->getMemCoords(); // <<xBeg, xEnd>, <yBeg, yEnd>>
@@ -169,15 +165,21 @@ void WorldMap::render(Camera* camP)
 			itemPos.y = jBegin;
 			itemPosSP = camP->camera2dTransform(&itemPos);
 			
-			al_draw_scaled_bitmap(
-				assets.at(wt.type),		// bitmap
-				0, 0,					// src xy
-				srcScale, srcScale,		// src scale
-				itemPosSP.x,		// dest x
-				itemPosSP.y,			//  y
-				destScale, destScale,	// dest scale
-				NULL);
-			//al_draw_text(base_font, )
+			if (flags.render)
+				al_draw_scaled_bitmap(
+					assets.at(wt.type),		// bitmap
+					0, 0,					// src xy
+					srcScale, srcScale,		// src scale
+					itemPosSP.x,		// dest x
+					itemPosSP.y,			//  y
+					destScale, destScale,	// dest scale
+					NULL);
+			if (flags.devel)
+				al_draw_text(base_font, fontC,
+					itemPosSP.x,		// dest x
+					itemPosSP.y,			//  y
+					NULL,
+					text.c_str());
 		}
 	}
 }

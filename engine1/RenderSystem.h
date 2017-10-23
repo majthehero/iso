@@ -6,6 +6,16 @@
 // ui element
 #define UI_EL_SIZE 48
 class DrawableItem {
+
+	typedef struct {
+		bool render;
+		bool devel;
+		bool text;
+		bool error;
+	} Flags;
+
+private:
+	Flags flags;
 public:
 	ALLEGRO_BITMAP* icon;
 	std::string text;

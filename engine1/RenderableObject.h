@@ -3,15 +3,17 @@
 #include <allegro5\allegro.h>
 #include <allegro5\allegro_font.h>
 #include <allegro5\allegro_ttf.h>
-//#include <allegro5\allegro_primitives.h>
+#include <allegro5\allegro_primitives.h>
 #include <allegro5\allegro_image.h>
 #include <allegro5\color.h>
+
+#include "debug.h"
 
 #include "Camera.h"
 
 class RenderableObject
 {
-private:
+protected:
 	ALLEGRO_BITMAP* empty_sprite;
 	ALLEGRO_FONT* base_font;
 	ALLEGRO_COLOR backC;
@@ -32,6 +34,8 @@ private:
 	std::pair<int, int> sprite_size; // asset file size - resolution xy
 	ScreenPosition sprite_center;
 	std::pair<float, float> sprite_scale;
+
+	std::string text;
 
 public:
 	RenderableObject(); // vse podaj? setterji bolje, da lahko sistemi lepo nastavijo vse?

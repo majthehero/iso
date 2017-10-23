@@ -7,8 +7,8 @@
 RenderSystem::RenderSystem(MessageBus* msgBusP)
 {
 	messages = msgBusP;
-	width = 960;
-	height = 540;
+	width = DEBUG_WIDTH;
+	height = DEBUG_HEIGHT;
 	display = al_create_display(width, height);
 	ui_system.setMessageBus(msgBusP);
 }
@@ -64,6 +64,8 @@ void RenderSystem::update()
 
 DrawableItem::DrawableItem()
 {
+	flags = { true, true, true, false };
+
 	ALLEGRO_DISPLAY* displ = al_get_current_display();
 	icon = al_create_bitmap(UI_EL_SIZE, UI_EL_SIZE);
 	al_set_target_bitmap(icon);
@@ -80,7 +82,9 @@ DrawableItem::~DrawableItem()
 void DrawableItem::draw(float x, float y)
 {
 	std::cerr << "item being drawn";
-	al_draw_bitmap(icon, x, y, NULL);
+	if (flags.render) 
+		al_draw_bitmap(icon, x, y, NULL);
+	
 }
 
 
@@ -115,15 +119,14 @@ void DrawableContainer::draw()
 	int column = 0;
 	int row = 0;
 	for (auto element : elements) {
-		std::cerr << "drawing element " << column << " " << row << std::endl;
+
 		item_x += padding;
 		element->draw(item_x, item_y);
 		column++;
 		item_x += UI_EL_SIZE;
-		std::cerr << "x, y " << item_x << " " << item_y << std::endl;
-		std::cerr << "col, row " << column << " " << row << std::endl;
 
-		if ((row)* UI_EL_SIZE > size_x) {
+		if ((column)* UI_EL_SIZE > size_x) {
+			column = 0;
 			item_x = item_x_start;
 			item_y += padding + UI_EL_SIZE;
 			row++;
@@ -153,7 +156,7 @@ UISubSystem::UISubSystem()
 	c1.elements.push_back(new DrawableItem());
 	c1.elements.push_back(new DrawableItem());
 	containers.push_back(c1);
-	//
+
 	ui_overlay = al_create_bitmap(DEBUG_WIDTH, DEBUG_HEIGHT);
 }
 
@@ -167,7 +170,9 @@ void UISubSystem::update() // currently works as render for testing purposes
 	// draw on a sepparate layer
 	ALLEGRO_DISPLAY* displ = al_get_current_display();
 	al_set_target_bitmap(ui_overlay);
+
 	al_clear_to_color(al_map_rgba(0, 0, 0, 0)); // set overlay buffer to empty
+
 	// read messages
 	std::pair < std::vector<Message>::iterator,
 		std::vector<Message>::iterator> p = messages->getIterators();
@@ -178,18 +183,16 @@ void UISubSystem::update() // currently works as render for testing purposes
 			
 			switch (p.first->getCommand()) {
 			case CMD_UI:
-				std::cout << "ui update\n";
 				for (auto c : containers) {
 					c.draw();
 				}
-				p.first->shouldRemove();
+				p.first->mark_remove();
 			}
 
 		}
 	}
-	//al_set_target_bitmap(al_get_backbuffer(displ));
-	al_set_target_backbuffer(displ);
 
+	al_set_target_backbuffer(displ);
 }
 
 ALLEGRO_BITMAP * UISubSystem::getOverlay()
