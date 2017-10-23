@@ -8,6 +8,7 @@ Subsystems are:
   - InputSystem: listens for kbd and mouse events. Generates commands and drops unused events.
   - GameSystem: executes commands from InputSystem. Generates commands for RenderSystem.
   - RenderSystem: renders. Currently placeholder 2D grid environment.
+    - UISubSystem: renders ui and contains a UI overlay. Render system blends it over render.
   
 Subsystems communicate via MessageBus, implemented as a vector.
 MessageBus will periodically empty itself, keeping unread messages.
