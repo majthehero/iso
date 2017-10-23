@@ -10,7 +10,7 @@
 #include <allegro5\allegro.h>
 #include <allegro5\allegro_font.h>
 #include <allegro5\allegro_ttf.h>
-#include <allegro5\allegro_primitives.h>
+//#include <allegro5\allegro_primitives.h>
 #include <allegro5\allegro_image.h>
 
 #include "RenderableObject.h"
@@ -65,14 +65,14 @@ public:
 
 // World
 
-class World
+class Environment
 {
 private:
 	WorldMap worldMap;
 	Camera camera;
 public:
-	World();
-	~World();
+	Environment();
+	~Environment();
 
 	WorldMap& getMap();
 	Camera* getCamera();
@@ -83,8 +83,8 @@ public:
 // for SYSTEMS
 class WORLD_ACCESS {
 protected:
-	World* world;  // !todo: replace pointer with something a bit smarter
+	Environment* world;  // !todo: replace pointer with something a bit smarter
 public:
-	void assignWorld(World* w);
+	void assignWorld(Environment* w);
 
 };

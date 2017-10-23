@@ -133,6 +133,7 @@
     <ClInclude Include="Loader.h" />
     <ClInclude Include="Messaging.h" />
     <ClInclude Include="RenderableObject.h" />
+    <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="World.h" />
@@ -144,6 +145,7 @@
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="Messaging.cpp" />
     <ClCompile Include="RenderableObject.cpp" />
+    <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="World.cpp" />

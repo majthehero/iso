@@ -8,6 +8,7 @@ enum SYSTEM {
 	SYS_INPUT,
 	SYS_GAME,
 	SYS_RENDER,
+	SYS_UI,
 
 	SYS_ERROR
 };
@@ -25,6 +26,7 @@ enum COMMAND {
 	CMD_RCLICK,
 	// game sends:
 	CMD_RENDER,
+	CMD_UI,
 
 	CMD_ERROR
 };

@@ -1,20 +1,19 @@
 #include "RenderableObject.h"
 
-ALLEGRO_BITMAP* RenderableObject::empty_sprite = NULL;
-ALLEGRO_FONT* RenderableObject::base_font = NULL;
-ALLEGRO_COLOR* RenderableObject::white = NULL;
-ALLEGRO_COLOR* RenderableObject::black = NULL;
-ALLEGRO_COLOR* RenderableObject::red   = NULL;
-ALLEGRO_COLOR* RenderableObject::green = NULL;
-ALLEGRO_COLOR* RenderableObject::blue  = NULL;
-
-
 RenderableObject::RenderableObject()
 {
+	ALLEGRO_DISPLAY* displ = al_get_current_display();
+
+	base_font = al_load_font("RobotoCondensed-Light.tff", 16, NULL);
+	if (!base_font) std::cerr << "RobotoCondensed-Light.tff load failed" << std::endl;
+	backC = al_map_rgb_f(0.0f, 0.1f, 0.3f);
+	fontC = al_map_rgb_f(1.0f, 0.8f, 0.3f);
+
+
 	empty_sprite = al_create_bitmap(64, 64);
 	al_set_target_bitmap(empty_sprite);
 	al_clear_to_color(al_map_rgba(0, 0, 0, 0));
-	al_set_target_bitmap(NULL);
+	al_set_target_bitmap(al_get_backbuffer(displ));
 
 }
 

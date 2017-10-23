@@ -1,6 +1,7 @@
 #include "Engine.h"
 
 #include "System.h"
+#include "RenderSystem.h"
 #include "World.h"
 
 Engine::Engine()
@@ -27,7 +28,7 @@ int main()
 	al_init_ttf_addon();
 	al_init_image_addon();
 	al_init_primitives_addon();
-	
+		
 	// set up messaging and memory
 	MessageBus messageBus;
 	// load systems
@@ -36,16 +37,17 @@ int main()
 	// render system inits allegro
 	RenderSystem renderSystem(&messageBus);
 	// world needs allegro to construct itself
-	World world;
+	Environment world;
 	gameSystem.assignWorld(&world);
 	renderSystem.assignWorld(&world);
-	
+		
 	// game loop
 	while (true)
 	{
 		inputSystem.update();
 		gameSystem.update();
 		renderSystem.update();
+		//uiSys.update();
 	}
 
 	return 0;

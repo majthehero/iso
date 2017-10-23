@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 
 #include <allegro5\allegro.h>
 #include <allegro5\allegro_font.h>
@@ -24,6 +25,7 @@ public:
 	~System();
 
 	virtual void update() = 0;
+	virtual void setMessageBus(MessageBus* msgBusP);
 };
 
 /* INPUT SYSTEM */
@@ -34,7 +36,6 @@ typedef struct {
 	int key_down;
 	int key_action;
 } KEY_LUT;
-
 typedef struct {
 	int mouseL;		// allegro counts mouse buttons 1 .. n
 	int mouseM;		// when check for pressed in ALLEGRO_MOUSE_STATE use 2^(mb_num-1)
@@ -42,8 +43,7 @@ typedef struct {
 	int mouse4;
 	int mouse5;
 } MOUSE_LUT;
-
-class InputSystem 
+class InputSystem
 	: public System
 {
 private:
@@ -71,23 +71,3 @@ public:
 	// Inherited via System
 	virtual void update() override;
 };
-
-
-/* RENDER SYSTEM */
-// WORLD_ACCESS should be used read only until write access is locked
-class RenderSystem : public System, public WORLD_ACCESS
-{
-private:
-	int width, height;
-	ALLEGRO_DISPLAY* display;
-	ALLEGRO_FONT* base_font;
-public:
-	RenderSystem(MessageBus* msgBus);
-	~RenderSystem();
-
-	void render();
-
-	// Inherited via System
-	virtual void update() override;
-};
-

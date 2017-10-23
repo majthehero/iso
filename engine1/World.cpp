@@ -2,23 +2,23 @@
 
 #include "debug.h"
 
-World::World()
+Environment::Environment()
 {
 	// init camera
 	camera.setPosition(0.0f, 0.0f);
 }
 
 
-World::~World()
+Environment::~Environment()
 {
 }
 
-WorldMap& World::getMap()
+WorldMap& Environment::getMap()
 {
 	return worldMap;
 }
 
-Camera * World::getCamera()
+Camera * Environment::getCamera()
 {
 	return &camera; // !todo: replace pointer
 }
@@ -30,7 +30,7 @@ void WorldMap::loadMap()
 	file.open(path_to_map);
 	std::cerr << path_to_map << std::endl;
 	if (!file) {
-		std::cerr << "fuck\n";
+		std::cerr << "failed to open " << path_to_map << std::endl;
 		return;
 	}
 	// read metadata
@@ -75,12 +75,16 @@ WorldMap::WorldMap()
 	// load assets
 	// !hardcode: load assets from file
 	ALLEGRO_BITMAP *bitmapP = al_load_bitmap("assets/grass.png");
+	if (!bitmapP) std::cerr << "asset load failed: assets/grass.png" << std::endl;
 	assets.push_back(bitmapP);
 	bitmapP = al_load_bitmap("assets/dirt.png");
+	if (!bitmapP) std::cerr << "asset load failed: assets/dirt.png" << std::endl;
 	assets.push_back(bitmapP);
 	bitmapP = al_load_bitmap("assets/water.png");
+	if (!bitmapP) std::cerr << "asset load failed: assets/water.png" << std::endl;
 	assets.push_back(bitmapP);
 	bitmapP = al_load_bitmap("assets/wall.png");
+	if (!bitmapP) std::cerr << "asset load failed: assets/wall.png" << std::endl;
 	assets.push_back(bitmapP);
 
 	// !placeholder: load map from file
@@ -178,7 +182,7 @@ void WorldMap::render(Camera* camP)
 	}
 }
 
-void WORLD_ACCESS::assignWorld(World* w)
+void WORLD_ACCESS::assignWorld(Environment* w)
 {
 	world = w;
 }

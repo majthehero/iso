@@ -1,7 +1,5 @@
 #include "System.h"
 
-#include "debug.h"
-
 
 System::System()
 {
@@ -10,6 +8,11 @@ System::System()
 
 System::~System()
 {
+}
+
+void System::setMessageBus(MessageBus * msgBusP)
+{
+	messages = msgBusP;
 }
 
 
@@ -47,13 +50,13 @@ void InputSystem::update()
 	Message msg;
 	msg.setDest(SYS_GAME);
 	// read input events
-	while (al_get_next_event(eventQueue, &event)) 
+	while (al_get_next_event(eventQueue, &event))
 	{
 		if (event.type == ALLEGRO_EVENT_KEY_CHAR) {
 
 			if (event.keyboard.keycode == key_lut.key_down) {
 				msg.setComm(CMD_DOWN);
-			} 
+			}
 			else if (event.keyboard.keycode == key_lut.key_up) {
 				msg.setComm(CMD_UP);
 			}
@@ -64,11 +67,11 @@ void InputSystem::update()
 				msg.setComm(CMD_RIGHT);
 			}
 			else if (event.keyboard.keycode == key_lut.key_action) {
-				msg.setComm(CMD_ACTION); 
+				msg.setComm(CMD_ACTION);
 			}
 		}
 		else if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
-			if (event.mouse.button == mouse_lut.mouseL) { 
+			if (event.mouse.button == mouse_lut.mouseL) {
 				msg.setComm(CMD_LCLICK);
 			}
 			else if (event.mouse.button == mouse_lut.mouseR) {
@@ -88,13 +91,13 @@ void InputSystem::update()
 GameSystem::GameSystem(MessageBus* msgBus)
 {
 	messages = msgBus;
-	
+
 }
 
 
 GameSystem::~GameSystem()
 {
-	
+
 }
 
 void GameSystem::update()
@@ -106,8 +109,6 @@ void GameSystem::update()
 	WorldPosition move;
 
 	// read messages
-	/*std::vector<Message>::iterator iBegin = messages->getIterator();
-	std::vector<Message>::iterator iEnd = messages->iteratorEnd();*/
 	std::pair < std::vector<Message>::iterator,
 		std::vector<Message>::iterator> p = messages->getIterators();
 	for (; p.first != p.second; p.first++) {
@@ -148,6 +149,10 @@ void GameSystem::update()
 				msg.setComm(CMD_RENDER);
 				messages->temp.push_back(msg);
 				cerr << "click, render request prepared\n";
+				msg.setDest(SYS_UI);
+				msg.setComm(CMD_UI);
+				messages->temp.push_back(msg);
+				cerr << "click, UI will render\n";
 				break;
 			case CMD_RCLICK:
 				cerr << "right click, zoom out\n";
@@ -168,50 +173,3 @@ void GameSystem::update()
 	}
 	messages->temp.clear();
 }
-
-
-RenderSystem::RenderSystem(MessageBus* msgBus)
-{
-	messages = msgBus;
-	width = 960;
-	height = 540;
-	display = al_create_display(width, height);
-	al_load_font("RobotoCondensed-Light.tff", 16, NULL);
-}
-
-
-RenderSystem::~RenderSystem()
-{
-}
-
-void RenderSystem::render()
-{
-	al_clear_to_color(al_map_rgb(0, 15, 10));
-
-	world->getMap().render(world->getCamera());
-	
-	al_flip_display(); // must be called at the end of render step
-}
-
-void RenderSystem::update()
-{
-	auto iBegin = messages->getIterator();
-	auto iEnd = messages->iteratorEnd();
-	for ( ; iBegin != iEnd; iBegin++) 
-	{
-		if (iBegin->shouldRemove()) continue;
-		if (iBegin->getDest() == SYS_RENDER) 
-		{
-			if (iBegin->getCommand() == CMD_RENDER) 
-			{
-				render();
-				iBegin->mark_remove();
-			}
-			else 
-			{
-				std::cerr << "lol wut" << std::endl;
-			}
-		}
-	}
-}
-;

@@ -3,7 +3,7 @@
 #include <allegro5\allegro.h>
 #include <allegro5\allegro_font.h>
 #include <allegro5\allegro_ttf.h>
-#include <allegro5\allegro_primitives.h>
+//#include <allegro5\allegro_primitives.h>
 #include <allegro5\allegro_image.h>
 #include <allegro5\color.h>
 
@@ -12,13 +12,10 @@
 class RenderableObject
 {
 private:
-	static ALLEGRO_BITMAP* empty_sprite;
-	static ALLEGRO_FONT* base_font;
-	static ALLEGRO_COLOR* white;
-	static ALLEGRO_COLOR* black;
-	static ALLEGRO_COLOR* red;
-	static ALLEGRO_COLOR* green;
-	static ALLEGRO_COLOR* blue;
+	ALLEGRO_BITMAP* empty_sprite;
+	ALLEGRO_FONT* base_font;
+	ALLEGRO_COLOR backC;
+	ALLEGRO_COLOR fontC;
 	
 	typedef struct {
 		bool render;
