@@ -1,9 +1,5 @@
 #include "RenderSystem.h"
 
-#include "debug.h"
-
-
-
 RenderSystem::RenderSystem(MessageBus* msgBusP)
 {
 	messages = msgBusP;

@@ -52,9 +52,7 @@ std::pair<std::pair<int, int>, std::pair<int, int>> Camera::getMemCoords()
 		<< world_position.y << std::endl;
 	std::cerr << "INFO: frustum edges: " << x1 << " " << x2 << "; "
 		<< y1 << " " << y2 << std::endl;
-		
-
-
+	
 	return p;
 }
 

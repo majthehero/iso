@@ -1,7 +1,5 @@
 #include "World.h"
 
-#include "debug.h"
-
 Environment::Environment()
 {
 	// init camera
@@ -20,7 +18,7 @@ WorldMap& Environment::getMap()
 
 Camera * Environment::getCamera()
 {
-	return &camera; // !todo: replace pointer
+	return &camera;
 }
 
 void WorldMap::loadMap()
@@ -36,10 +34,8 @@ void WorldMap::loadMap()
 	// read metadata
 	std::string line;
 	std::getline(file, line);
-	//std::cerr << line << std::endl;
 	size_x = std::stoi(line);
 	std::getline(file, line);
-	//std::cerr << line << std::endl;
 	size_y = std::stoi(line);
 	
 	// prepare tile
@@ -141,14 +137,17 @@ void WorldMap::render(Camera* camP)
 	
 	WorldPosition itemPos(0.0f, 0.0f);
 
+	// start them INFO lines on a new line
+	std::cerr << std::endl;
 	for ( ; jBegin < jEnd; jBegin++ )
 	{
 		for ( iBegin = p.second.first; iBegin < iEnd; iBegin++ ) // reset on new row
 		{
-			//std::cerr << "INFO:  " << iBegin << "   y: " << jBegin << std::endl;
+			std::cerr << "\nINFO: render tile " << jBegin << " " << iBegin;
 			if (jBegin < 0 || jBegin >= size_y) continue; // out of mem, don't draw
 			if (iBegin < 0 || iBegin >= size_x) continue; // out of mem, don't draw
-		
+			std::cerr << " VISIBLE ";
+
 			WorldTile wt = getTile(iBegin, jBegin);
 			
 			float srcScale = TILE_SIZE;
@@ -171,10 +170,12 @@ void WorldMap::render(Camera* camP)
 				al_draw_text(base_font, fontC,
 					itemPosSP.x,		// dest x
 					itemPosSP.y,			//  y
-					NULL,
-					text.c_str());
+					NULL,				// flags
+					text.c_str());		// text c string
 		}
 	}
+	// close those INFO lines
+	std::cerr << std::endl;
 }
 
 void WORLD_ACCESS::assignWorld(Environment* w)

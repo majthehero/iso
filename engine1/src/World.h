@@ -15,6 +15,7 @@
 
 #include "RenderableObject.h"
 #include "Util.h"
+#include "Actor.h"
 
 // WorldTile
 
@@ -70,6 +71,7 @@ class Environment
 private:
 	WorldMap worldMap;
 	Camera camera;
+	Actor player;
 public:
 	Environment();
 	~Environment();

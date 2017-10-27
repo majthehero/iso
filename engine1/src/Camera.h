@@ -8,8 +8,6 @@ class Camera
 {
 private:
 	/* manually init position */
-	// !todo: hide a copy to encapsulate and protect data
-	// !todo: correct constructors to auto init position to 0,0
 	WorldPosition world_position; 
 	float scale;
 public:
