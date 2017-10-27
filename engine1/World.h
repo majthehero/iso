@@ -10,7 +10,7 @@
 #include <allegro5\allegro.h>
 #include <allegro5\allegro_font.h>
 #include <allegro5\allegro_ttf.h>
-//#include <allegro5\allegro_primitives.h>
+#include <allegro5\allegro_primitives.h>
 #include <allegro5\allegro_image.h>
 
 #include "RenderableObject.h"
@@ -44,7 +44,7 @@ private:
 	int size_y;
 	std::string path_to_map;
 	std::vector<WorldTile> world_map; 
-	std::vector<ALLEGRO_BITMAP*> assets; // !slow? wanted contigous memory
+	std::vector<ALLEGRO_BITMAP*> assets; // !slow? want contigous memory
 	void loadMap();
 public:
 	WorldMap();

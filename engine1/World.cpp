@@ -28,18 +28,18 @@ void WorldMap::loadMap()
 	// open file
 	std::ifstream file;
 	file.open(path_to_map);
-	std::cerr << path_to_map << std::endl;
 	if (!file) {
-		std::cerr << "failed to open " << path_to_map << std::endl;
+		std::cerr << "ERROR: failed to load map: " << path_to_map << std::endl;
 		return;
 	}
+
 	// read metadata
 	std::string line;
 	std::getline(file, line);
-	std::cerr << line << std::endl;
+	//std::cerr << line << std::endl;
 	size_x = std::stoi(line);
 	std::getline(file, line);
-	std::cerr << line << std::endl;
+	//std::cerr << line << std::endl;
 	size_y = std::stoi(line);
 	
 	// prepare tile
@@ -73,35 +73,27 @@ void WorldMap::loadMap()
 WorldMap::WorldMap()
 {
 	// load assets
-	// !hardcode: load assets from file
+	// !hardcode: load assets from file - why tho, it's kinda the same
 	ALLEGRO_BITMAP *bitmapP = al_load_bitmap("assets/grass.png");
-	if (!bitmapP) std::cerr << "asset load failed: assets/grass.png" << std::endl;
+	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/grass.png" << std::endl;
 	assets.push_back(bitmapP);
 	bitmapP = al_load_bitmap("assets/dirt.png");
-	if (!bitmapP) std::cerr << "asset load failed: assets/dirt.png" << std::endl;
+	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/dirt.png" << std::endl;
 	assets.push_back(bitmapP);
 	bitmapP = al_load_bitmap("assets/water.png");
-	if (!bitmapP) std::cerr << "asset load failed: assets/water.png" << std::endl;
+	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/water.png" << std::endl;
 	assets.push_back(bitmapP);
 	bitmapP = al_load_bitmap("assets/wall.png");
-	if (!bitmapP) std::cerr << "asset load failed: assets/wall.png" << std::endl;
+	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/wall.png" << std::endl;
 	assets.push_back(bitmapP);
-
-	// !placeholder: load map from file
-	//int tilecount = 0;
-	//for (WorldTile wt : world_map) {
-	//	wt.type = static_cast<WORLD_TILE_TYPE>((tilecount++ / 3) % 4);
-	//	//std::cerr << "Generated tile." << wt.type << "\n";
-	//}
-	//std::cerr << "Generated map.\n";
-	
-	// !placeholder: path to map
+		
+	// !placeholder: path to map - probably multiple maps, hot load
 	path_to_map = "map_demo.txt";
+	
 	//clear map and load from file
 	world_map.clear();
 	loadMap();
-	std::cerr << "Loaded map.\n";
-	
+		
 }
 
 WorldMap::WorldMap(std::string pathToMap)
@@ -153,11 +145,12 @@ void WorldMap::render(Camera* camP)
 	{
 		for ( iBegin = p.second.first; iBegin < iEnd; iBegin++ ) // reset on new row
 		{
-		
+			//std::cerr << "INFO:  " << iBegin << "   y: " << jBegin << std::endl;
 			if (jBegin < 0 || jBegin >= size_y) continue; // out of mem, don't draw
 			if (iBegin < 0 || iBegin >= size_x) continue; // out of mem, don't draw
 		
 			WorldTile wt = getTile(iBegin, jBegin);
+			
 			float srcScale = TILE_SIZE;
 			float destScale = TILE_SIZE * camP->getScale();
 		

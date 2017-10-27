@@ -1,5 +1,7 @@
 #include "Camera.h"
 
+#include <iostream>
+
 #include "Util.h"
 
 
@@ -14,35 +16,45 @@ Camera::~Camera()
 {
 }
 
-/*
+/* What needs loading - view culling
 returns: pair<pair<int, int>pair<int, int>>: xMin, xMax, yMin, yMax
 // !slow: loops should be replaced with some real interator magic
 */
 std::pair<std::pair<int, int>, std::pair<int, int>> Camera::getMemCoords()
 {
-	// worldspace frustum size from scale
-	float frustum_x_size = DEBUG_WIDTH / (TILE_SIZE * scale);
-	float frustum_y_size = DEBUG_HEIGHT / (TILE_SIZE * scale);
-	
-	float frustumLeftEdge = world_position.x - frustum_x_size / 2;
-	float frustumRightEdge = world_position.x + frustum_x_size / 2;
+	// everything is worldspace
+	float cX = world_position.x;
+	float cY = world_position.y;
+	// how many tiles are on screen
+	float tilesX = (float)DEBUG_WIDTH / (float)TILE_SIZE;
+	float tilesY = (float)DEBUG_HEIGHT / (float)TILE_SIZE;
+	// get world space visible bounds
+	float x1 = cX - tilesX;
+	float x2 = cX + tilesX;
+	float y1 = cY - tilesY;
+	float y2 = cY + tilesY;
+	// round away from 0 to include partially visible tiles
+	int xL = std::floor(x1);
+	int xR = std::ceil(x2);
+	int yU = std::floor(y1);
+	int yD = std::ceil(y2);
 
-	float frustumUpperEdge = world_position.y - frustum_y_size / 2;
-	float frustumBottomEdge = world_position.y + frustum_y_size / 2;
-	
-	// round to larger area
-	int x1 = floor(frustumLeftEdge);
-	int x2 = ceil(frustumRightEdge);
-	int y1 = floor(frustumUpperEdge);
-	int y2 = ceil(frustumBottomEdge);
-		
+	// return object pair<pair<>>
 	std::pair<std::pair<int, int>, std::pair<int, int>> p;
-	std::pair<int, int> xBound(x1, x2);
-	std::pair<int, int> yBound(y1, y2);
+	std::pair<int, int> xBound(xL, xR);
+	std::pair<int, int> yBound(yU, yD);
 
 	p.first = xBound;
 	p.second = yBound;
 		
+	// debug info dump
+	std::cerr << "INFO: camera pos: " << world_position.x << " "
+		<< world_position.y << std::endl;
+	std::cerr << "INFO: frustum edges: " << x1 << " " << x2 << "; "
+		<< y1 << " " << y2 << std::endl;
+		
+
+
 	return p;
 }
 
@@ -62,30 +74,18 @@ returns: position of item in screen space - unit is pixel
 */
 ScreenPosition Camera::camera2dTransform(WorldPosition* itemPosWSpace)
 {
-	// both camera and item are in worldspace
-	float sX = itemPosWSpace->x - world_position.x;
-	float sY = itemPosWSpace->y - world_position.y;
-	// convert to screenspace - now sX is screen space modifier 
-	sX *= TILE_SIZE;
-	sY *= TILE_SIZE;
-	// center around 0,0 for scale
-	sX -= DEBUG_WIDTH / 2;
-	sY -= DEBUG_HEIGHT / 2;
-	// scale
-	sX *= scale;
-	sY *= scale;
-	// recenter to middle of screen
-	sX += DEBUG_WIDTH;
-	sY += DEBUG_HEIGHT;
+	// worldspace to screenspace conversion
+	float iX = itemPosWSpace->x * TILE_SIZE * scale;
+	float iY = itemPosWSpace->y * TILE_SIZE * scale;
+	float cX = world_position.x * TILE_SIZE * scale;
+	float cY = world_position.y * TILE_SIZE * scale;
+	iX -= cX;
+	iY -= cY;
 
 	// return pair pair
 	ScreenPosition itemPosSSpace;
-	itemPosSSpace.x = sX;
-	itemPosSSpace.y = sY;
-
-	__dbg.logCameraTransformation(
-		itemPosWSpace->x, itemPosWSpace->y,
-		itemPosSSpace.x, itemPosSSpace.y);
+	itemPosSSpace.x = iX;
+	itemPosSSpace.y = iY;
 
 	return itemPosSSpace;
 }

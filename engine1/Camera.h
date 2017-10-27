@@ -4,8 +4,6 @@
 
 #include "Util.h"
 
-#include "debug.h"
-
 class Camera
 {
 private:
@@ -17,9 +15,7 @@ private:
 public:
 	Camera();
 	~Camera();
-
-	Debug __dbg;
-
+	
 	void move(WorldPosition deltaPos) {
 		world_position.add(deltaPos);
 	}

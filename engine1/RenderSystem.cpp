@@ -50,7 +50,7 @@ void RenderSystem::update()
 			}
 			else 
 			{
-				std::cerr << "lol wut" << std::endl;
+				std::cerr << "WARNING: RenderSystem received unknown cmd" << std::endl;
 			}
 		}
 	}
@@ -81,7 +81,6 @@ DrawableItem::~DrawableItem()
 
 void DrawableItem::draw(float x, float y)
 {
-	std::cerr << "item being drawn";
 	if (flags.render) 
 		al_draw_bitmap(icon, x, y, NULL);
 	
@@ -105,10 +104,10 @@ DrawableContainer::~DrawableContainer() { }
 
 void DrawableContainer::draw()
 {
-	std::cerr << position.x << " " << position.y << std::endl;
+	/*std::cerr << position.x << " " << position.y << std::endl;
 	std::cerr << position.x + size_x << " " << position.y + size_y << std::endl;
 	std::cerr << backC.r << " " << backC.g << " " << backC.b << " " << backC.a << std::endl;
-
+*/
 	al_draw_filled_rounded_rectangle(position.x, position.y,
 		position.x + size_x, position.y + size_y, 5.0f, 5.0f, backC);
 	float item_x = position.x + 5.0f;
@@ -144,7 +143,6 @@ void DrawableContainer::draw()
 
 UISubSystem::UISubSystem()
 {
-	std::cout << "UIsystem init\n";
 	// test
 	DrawableContainer c1;
 	c1.position = ScreenPosition(20.0f, 20.0f);

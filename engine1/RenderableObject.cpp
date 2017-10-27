@@ -5,7 +5,7 @@ RenderableObject::RenderableObject()
 	ALLEGRO_DISPLAY* displ = al_get_current_display();
 
 	base_font = al_load_ttf_font("fonts/roboto_light.ttf", 16, NULL);
-	if (!base_font) std::cerr << "roboto_light.tff load failed" << std::endl;
+	if (!base_font) std::cerr << "ERROR: roboto_light.tff load failed" << std::endl;
 	backC = al_map_rgb_f(0.0f, 0.1f, 0.3f);
 	fontC = al_map_rgb_f(1.0f, 0.0f, 1.0f); // PINK
 
