@@ -17,6 +17,7 @@ Camera::~Camera()
 }
 
 /* What needs loading - view culling
+Tested, works.
 returns: pair<pair<int, int>pair<int, int>>: xMin, xMax, yMin, yMax
 // !slow: loops should be replaced with some real interator magic
 */

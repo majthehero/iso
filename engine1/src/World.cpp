@@ -134,19 +134,21 @@ void WorldMap::render(Camera* camP)
 	int iEnd = p.first.second;
 	int jBegin = p.second.first;
 	int jEnd = p.second.second;
-	
-	WorldPosition itemPos(0.0f, 0.0f);
+	std::cerr << "INFO: render got mem coords: x " << iBegin << " - " << iEnd
+		<< " y " << jBegin << " - " << jEnd << std::endl;
 
-	// start them INFO lines on a new line
-	std::cerr << std::endl;
-	for ( ; jBegin < jEnd; jBegin++ )
+	WorldPosition itemPos(0.0f, 0.0f);
+	
+	for ( jBegin = p.second.first; jBegin < jEnd; jBegin++ )
 	{
-		for ( iBegin = p.second.first; iBegin < iEnd; iBegin++ ) // reset on new row
+		std::cerr << "INFO: jBegin value: " << jBegin << std::endl;
+		for ( iBegin = p.first.first; iBegin < iEnd; iBegin++ ) // reset on new row
 		{
-			std::cerr << "\nINFO: render tile " << jBegin << " " << iBegin;
+			std::cerr << "INFO: iBegin value: " << iBegin << std::endl;
+
+			//std::cerr << "\nINFO: render tile " << jBegin << " " << iBegin;
 			if (jBegin < 0 || jBegin >= size_y) continue; // out of mem, don't draw
 			if (iBegin < 0 || iBegin >= size_x) continue; // out of mem, don't draw
-			std::cerr << " VISIBLE ";
 
 			WorldTile wt = getTile(iBegin, jBegin);
 			
