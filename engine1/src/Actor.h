@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Util.h"
+#include "RenderableObject.h"
 
-class Actor
+class Actor : public RenderableObject
 {
-private:
-	WorldPosition position();
 public:
 	Actor();
 	~Actor();

@@ -29,13 +29,14 @@ protected:
 	Flags flags;
 
 
-	WorldPosition worldPosition;
+	WorldPosition world_position;
 	ALLEGRO_BITMAP* spriteP;
 	std::pair<int, int> sprite_size; // asset file size - resolution xy
 	ScreenPosition sprite_center;
 	std::pair<float, float> sprite_scale;
 
 	std::string text;
+	int object_id;
 
 public:
 	RenderableObject(); // vse podaj? setterji bolje, da lahko sistemi lepo nastavijo vse?

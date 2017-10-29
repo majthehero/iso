@@ -128,25 +128,19 @@ std::vector<ALLEGRO_BITMAP*>& WorldMap::getAssets()
 void WorldMap::render(Camera* camP) 
 {
 	ScreenPosition itemPosSP{ 0,0 };
-	// !slow: loops should be replaced with some real interator magic
+
 	auto p = camP->getMemCoords(); // <<xBeg, xEnd>, <yBeg, yEnd>>
 	int iBegin = p.first.first; 
 	int iEnd = p.first.second;
 	int jBegin = p.second.first;
 	int jEnd = p.second.second;
-	std::cerr << "INFO: render got mem coords: x " << iBegin << " - " << iEnd
-		<< " y " << jBegin << " - " << jEnd << std::endl;
-
+	
 	WorldPosition itemPos(0.0f, 0.0f);
 	
 	for ( jBegin = p.second.first; jBegin < jEnd; jBegin++ )
 	{
-		std::cerr << "INFO: jBegin value: " << jBegin << std::endl;
 		for ( iBegin = p.first.first; iBegin < iEnd; iBegin++ ) // reset on new row
 		{
-			std::cerr << "INFO: iBegin value: " << iBegin << std::endl;
-
-			//std::cerr << "\nINFO: render tile " << jBegin << " " << iBegin;
 			if (jBegin < 0 || jBegin >= size_y) continue; // out of mem, don't draw
 			if (iBegin < 0 || iBegin >= size_x) continue; // out of mem, don't draw
 
@@ -168,16 +162,20 @@ void WorldMap::render(Camera* camP)
 					itemPosSP.y,			//  y
 					destScale, destScale,	// dest scale
 					NULL);
-			if (flags.devel)
+
+			if (flags.devel) {
+				char * coords_str;
+				sprintf(coords_str, "%d,%d ", (int)itemPos.x, (int)itemPos.y);
+				if (!coords_str) coords_str = "err";
 				al_draw_text(base_font, fontC,
 					itemPosSP.x,		// dest x
 					itemPosSP.y,			//  y
 					NULL,				// flags
-					text.c_str());		// text c string
+					coords_str);		// text c string
+			}
+			
 		}
 	}
-	// close those INFO lines
-	std::cerr << std::endl;
 }
 
 void WORLD_ACCESS::assignWorld(Environment* w)

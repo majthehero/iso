@@ -30,7 +30,7 @@ void RenderableObject::render(Camera * camP)
 	float srcScale = TILE_SIZE;
 	float destScale = TILE_SIZE * camP->getScale();
 
-	itemPosSP = camP->camera2dTransform(&worldPosition);
+	itemPosSP = camP->camera2dTransform(&world_position);
 
 	if (!spriteP || flags.err_sprite) {
 		spriteP = empty_sprite;
