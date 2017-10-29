@@ -24,7 +24,7 @@ public:
 	System();
 	~System();
 
-	virtual void update() = 0;
+	virtual void update(float deltaT) = 0;
 	virtual void setMessageBus(MessageBus* msgBusP);
 };
 
@@ -56,7 +56,7 @@ public:
 	~InputSystem();
 
 	// Inherited via System
-	virtual void update() override;
+	virtual void update(float deltaT) override;
 };
 
 
@@ -69,5 +69,5 @@ public:
 	~GameSystem();
 
 	// Inherited via System
-	virtual void update() override;
+	virtual void update(float deltaT) override;
 };

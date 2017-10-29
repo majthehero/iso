@@ -3,6 +3,9 @@
 #include "System.h"
 
 // UI SUBSYSTEM
+
+extern int frames_per_second;
+
 // ui element
 #define UI_EL_SIZE 48
 class DrawableItem {
@@ -46,10 +49,9 @@ public:
 class UISubSystem :
 	public System
 {
-private:
-	ALLEGRO_BITMAP* ui_overlay;
 public:
 	// members
+	ALLEGRO_BITMAP* ui_overlay;
 	std::vector<DrawableContainer> containers;
 
 	// constructors
@@ -57,7 +59,7 @@ public:
 	~UISubSystem();
 
 	// Inherited via System
-	virtual void update() override;
+	virtual void update(float deltaT = 0.0f) override;
 
 	// return results
 	ALLEGRO_BITMAP* getOverlay();
@@ -81,5 +83,5 @@ public:
 	void render();
 
 	// Inherited via System
-	virtual void update() override;
+	virtual void update(float deltaT) override;
 };

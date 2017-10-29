@@ -24,13 +24,13 @@ void RenderSystem::render()
 	// update ui 
 	ui_system.update();
 	// blend ui overlay on top of render
-	al_draw_bitmap(ui_system.getOverlay(), 0.0f, 0.0f, NULL);
+	al_draw_bitmap(ui_system.ui_overlay, 0.0f, 0.0f, NULL);
 
 	// show render
 	al_flip_display(); // must be called at the end of render step
 }
 
-void RenderSystem::update()
+void RenderSystem::update(float deltaT)
 {
 	auto iBegin = messages->getIterator();
 	auto iEnd = messages->iteratorEnd();
@@ -43,10 +43,6 @@ void RenderSystem::update()
 			{
 				render();
 				iBegin->mark_remove();
-			}
-			else 
-			{
-				std::cerr << "WARNING: RenderSystem received unknown cmd" << std::endl;
 			}
 		}
 	}
@@ -100,10 +96,6 @@ DrawableContainer::~DrawableContainer() { }
 
 void DrawableContainer::draw()
 {
-	/*std::cerr << position.x << " " << position.y << std::endl;
-	std::cerr << position.x + size_x << " " << position.y + size_y << std::endl;
-	std::cerr << backC.r << " " << backC.g << " " << backC.b << " " << backC.a << std::endl;
-*/
 	al_draw_filled_rounded_rectangle(position.x, position.y,
 		position.x + size_x, position.y + size_y, 5.0f, 5.0f, backC);
 	float item_x = position.x + 5.0f;
@@ -139,18 +131,6 @@ void DrawableContainer::draw()
 
 UISubSystem::UISubSystem()
 {
-	// test
-	DrawableContainer c1;
-	c1.position = ScreenPosition(20.0f, 20.0f);
-	c1.size_x = 180;
-	c1.size_y = 120;
-	c1.elements.push_back(new DrawableItem());
-	c1.elements.push_back(new DrawableItem());
-	c1.elements.push_back(new DrawableItem());
-	c1.elements.push_back(new DrawableItem());
-	c1.elements.push_back(new DrawableItem());
-	containers.push_back(c1);
-
 	ui_overlay = al_create_bitmap(DEBUG_WIDTH, DEBUG_HEIGHT);
 }
 
@@ -159,14 +139,13 @@ UISubSystem::~UISubSystem() {
 	al_shutdown_primitives_addon();
 }
 
-void UISubSystem::update() // currently works as render for testing purposes
+void UISubSystem::update(float deltaT) // currently works as render for testing purposes
 {
 	// draw on a sepparate layer
 	ALLEGRO_DISPLAY* displ = al_get_current_display();
 	al_set_target_bitmap(ui_overlay);
-
-	al_clear_to_color(al_map_rgba(0, 0, 0, 0)); // set overlay buffer to empty
-
+	al_clear_to_color(al_map_rgba(0, 0, 0, 0)); 
+	
 	// read messages
 	std::pair < std::vector<Message>::iterator,
 		std::vector<Message>::iterator> p = messages->getIterators();
@@ -186,6 +165,12 @@ void UISubSystem::update() // currently works as render for testing purposes
 		}
 	}
 
+	// draw fps count on top of all else
+	char fps_str[20];
+	sprintf(fps_str, "%d ", frames_per_second) < 0;
+	al_draw_text(base_font, al_map_rgb_f(1, 1, 1), 5, 5, NULL, fps_str);
+
+	// retuen allegro to normal state
 	al_set_target_backbuffer(displ);
 }
 

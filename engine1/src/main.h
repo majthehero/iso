@@ -10,16 +10,20 @@
 #include "World.h"
 #include "Messaging.h"
 
-class Engine
-{
-private:
-	
-public:
-	Engine();
-	~Engine();
+// timing
+float deltaT;
+float previous_time;
+int frames_per_second;
+
+double getDeltaTime();
+
+// ui
+
+// draw fps count
+ALLEGRO_FONT* base_font;
 
 
-};
 
 
+// main
 int main();

@@ -11,11 +11,12 @@
 
 #include "Camera.h"
 
+extern ALLEGRO_FONT* base_font;
+
 class RenderableObject
 {
 protected:
 	ALLEGRO_BITMAP* empty_sprite;
-	ALLEGRO_FONT* base_font;
 	ALLEGRO_COLOR backC;
 	ALLEGRO_COLOR fontC;
 	

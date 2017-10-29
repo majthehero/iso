@@ -1,27 +1,24 @@
-#include "Engine.h"
+#include "main.h"
 
 #include "System.h"
 #include "RenderSystem.h"
 #include "World.h"
 
-Engine::Engine()
-{
+double getDeltaTime() {
+	double currentTime = al_get_time();
+	double deltaTime = currentTime - previous_time;
+	frames_per_second = (int) (1.0 / deltaTime);
+	previous_time = currentTime;
+
+	return deltaTime;
 }
-
-
-Engine::~Engine()
-{
-}
-
-
-
-
 
 int main()
 {
 	// init allegro
 
 	al_init();
+	previous_time = al_get_time();
 	al_install_keyboard();
 	al_install_mouse();
 	al_init_font_addon();
@@ -44,10 +41,11 @@ int main()
 	// game loop
 	while (true)
 	{
-		inputSystem.update();
-		gameSystem.update();
-		renderSystem.update();
-		//uiSys.update();
+		deltaT = getDeltaTime();
+		inputSystem.update(deltaT);
+		gameSystem.update(deltaT);
+		renderSystem.update(deltaT);
+		
 	}
 
 	return 0;

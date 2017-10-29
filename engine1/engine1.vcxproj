@@ -129,7 +129,7 @@
   <ItemGroup>
     <ClInclude Include="src\Actor.h" />
     <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\Engine.h" />
+    <ClInclude Include="src\main.h" />
     <ClInclude Include="src\Loader.h" />
     <ClInclude Include="src\Messaging.h" />
     <ClInclude Include="src\RenderableObject.h" />
@@ -141,7 +141,7 @@
   <ItemGroup>
     <ClCompile Include="src\Actor.cpp" />
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Loader.cpp" />
     <ClCompile Include="src\Messaging.cpp" />
     <ClCompile Include="src\RenderableObject.cpp" />

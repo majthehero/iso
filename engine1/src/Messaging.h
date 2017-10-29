@@ -21,6 +21,9 @@ enum COMMAND {
 	CMD_DOWN,
 	CMD_LEFT,
 	CMD_ACTION,
+	// camera
+	CMD_ZOOM_IN,
+	CMD_ZOOM_OUT,
 	// mouse
 	CMD_LCLICK,
 	CMD_RCLICK,

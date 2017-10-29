@@ -48,12 +48,6 @@ std::pair<std::pair<int, int>, std::pair<int, int>> Camera::getMemCoords()
 	p.first = xBound;
 	p.second = yBound;
 		
-	// debug info dump
-	std::cerr << "INFO: camera pos: " << world_position.x << " "
-		<< world_position.y << std::endl;
-	std::cerr << "INFO: frustum edges: " << x1 << " " << x2 << "; "
-		<< y1 << " " << y2 << std::endl;
-	
 	return p;
 }
 

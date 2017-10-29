@@ -44,7 +44,7 @@ InputSystem::~InputSystem()
 
 }
 
-void InputSystem::update()
+void InputSystem::update(float deltaT)
 {
 	// prepare msg
 	Message msg;
@@ -100,7 +100,7 @@ GameSystem::~GameSystem()
 
 }
 
-void GameSystem::update()
+void GameSystem::update(float deltaT)
 {
 	using namespace std;
 	// prepare message
@@ -116,57 +116,45 @@ void GameSystem::update()
 		if (p.first->getDest() == SYS_GAME) {
 			switch (p.first->getCommand()) {
 			case CMD_UP:
-				cerr << "move_camera_up\n";
 				move.x = 0;
 				move.y = -0.333;
 				world->getCamera()->move(move);
 				break;
 			case CMD_DOWN:
-				cerr << "move_camera_down\n";
 				move.x = 0;
 				move.y = 0.333;
 				world->getCamera()->move(move);
 				break;
 			case CMD_LEFT:
-				cerr << "move_camera_left\n";
 				move.x = -0.333;
 				move.y = 0;
 				world->getCamera()->move(move);
 				break;
 			case CMD_RIGHT:
-				cerr << "move_camera_right\n";
 				move.x = 0.333;
 				move.y = 0;
 				world->getCamera()->move(move);
 				break;
-			case CMD_ACTION:
-				cerr << "zoom_camera_in\n";
+			case CMD_ZOOM_IN:
 				world->getCamera()->setScale(
 					world->getCamera()->getScale() / 0.8); 
 				break;
-			case CMD_LCLICK:
-				msg.setDest(SYS_RENDER);
-				msg.setComm(CMD_RENDER);
-				messages->temp.push_back(msg);
-				cerr << "click, will render world\n";
-				msg.setDest(SYS_UI);
-				msg.setComm(CMD_UI);
-				messages->temp.push_back(msg);
-				cerr << "click, will render ui\n";
-				break;
-			case CMD_RCLICK:
-				cerr << "zoom_camera_out";
+			case CMD_ZOOM_OUT:
 				world->getCamera()->setScale(
 					world->getCamera()->getScale() * 0.8);
 				break;
-			default:
-				std::cerr << "WARNING: RenderSystem received unknown cmd" 
-					<< std::endl;
 			}
 
 			p.first->mark_remove();
 		}
 	}
+	// send render command
+	msg.setDest(SYS_RENDER);
+	msg.setComm(CMD_RENDER);
+	messages->temp.push_back(msg);
+	msg.setDest(SYS_UI);
+	msg.setComm(CMD_UI);
+	messages->temp.push_back(msg);
 
 	// send messages
 	for (auto m : messages->temp) {
