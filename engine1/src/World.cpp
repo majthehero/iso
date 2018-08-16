@@ -2,11 +2,17 @@
 
 #include <iostream>
 
+
+// environment
+
 Environment::Environment()
 {
+	printf("Environment constructor.");
+	player_asset = al_load_bitmap("assets/Others/AgentPlume1.png");
+	if (!player_asset) std::cerr << "ERROR: asset load failed: assets/others/AgentPlume1.png" << std::endl;
 
+	fat.setSprite(player_asset);
 }
-
 
 Environment::~Environment()
 {
@@ -22,8 +28,13 @@ Camera * Environment::getCamera()
 	return & this->fat.camera;
 }
 
+
+// world map
+
 void WorldMap::loadMap()
 {
+	printf("	Loading map.");
+
 	// open file
 	std::ifstream file;
 	file.open(path_to_map);
@@ -81,6 +92,8 @@ void WorldMap::loadMap()
 
 WorldMap::WorldMap()
 {
+	printf("WorldMap constructor.");
+
 	// load assets
 	// !hardcode: load assets from file - why tho, it's kinda the same
 	
@@ -88,23 +101,23 @@ WorldMap::WorldMap()
 	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/wall.png" << std::endl;
 	assets.push_back(bitmapP);
 	
-	bitmapP = al_load_bitmap("assets/others/Ceramic.png");
-	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/Ceramic.png" << std::endl;
+	bitmapP = al_load_bitmap("assets/Others/Air.png");
+	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/Air.png" << std::endl;
 	assets.push_back(bitmapP);
 
 	bitmapP = al_load_bitmap("assets/grass.png");
 	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/grass.png" << std::endl;
 	assets.push_back(bitmapP);
 
-	bitmapP = al_load_bitmap("assets/others/AgentPlume.png");
-	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/AgentPlume.png" << std::endl;
+	bitmapP = al_load_bitmap("assets/Others/AgentPlume0.png");
+	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/AgentPlume0.png" << std::endl;
 	assets.push_back(bitmapP);
 
-	bitmapP = al_load_bitmap("assets/others/AgentPlume2.0.png");
-	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/AgentPlume2.0.png" << std::endl;
+	bitmapP = al_load_bitmap("assets/Others/AgentPlume1.png");
+	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/AgentPlume1.png" << std::endl;
 	assets.push_back(bitmapP);
-	
-		
+
+
 	// !placeholder: path to map - probably multiple maps, hot load
 	path_to_map = "assets/others/level0.map";
 	

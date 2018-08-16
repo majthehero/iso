@@ -43,8 +43,8 @@ typedef struct {
 	int mouse4;
 	int mouse5;
 } MOUSE_LUT;
-class InputSystem
-	: public System
+
+class InputSystem : public System
 {
 private:
 	KEY_LUT key_lut;

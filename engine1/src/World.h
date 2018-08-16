@@ -48,6 +48,7 @@ private:
 	std::string path_to_map;
 	std::vector<WorldTile> world_map; 
 	std::vector<ALLEGRO_BITMAP*> assets; // !slow? want contigous memory
+	
 	void loadMap();
 public:
 	WorldMap();
@@ -61,7 +62,7 @@ public:
 	std::vector<ALLEGRO_BITMAP*>& getAssets();
 
 	// inherited from RenderableObject
-	virtual void render(Camera* camP);
+	virtual void render(Camera* camP) override;
 
 };
 
@@ -73,6 +74,7 @@ class Environment
 public:
 	WorldMap worldMap;
 	Actor fat;
+	ALLEGRO_BITMAP* player_asset;
 
 	Environment();
 	~Environment();

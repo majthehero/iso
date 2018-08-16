@@ -1,12 +1,12 @@
 #include "Messaging.h"
 
 
+// message
 
 Message::Message()
 {
 	remove = false;
 }
-
 
 Message::~Message()
 {
@@ -45,10 +45,11 @@ bool Message::shouldRemove()
 }
 
 
+// message bus
+
 MessageBus::MessageBus()
 {
 }
-
 
 MessageBus::~MessageBus()
 {

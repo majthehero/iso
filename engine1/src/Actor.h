@@ -11,8 +11,10 @@ public:
 	Actor();
 	~Actor();
 
-	float momentum_x;
-	float momentum_y;
+	void setSprite(ALLEGRO_BITMAP* spriteP);
+
+	float momentum_x = 0.0f;
+	float momentum_y = 0.0f;
 
 	Camera camera;
 
@@ -23,21 +25,67 @@ public:
 
 	enum PlayerType playerType;
 
+	enum PlayerState {
+		IDLE,
+		JUMPING,
+		LEFT,
+		RIGHT
+	};
+	PlayerState playerState = IDLE;
+
 	// execute game space commands
-	
-	void moveLeft() 
+
+	void moveLeft()
 	{
-		this->momentum_x -= 1.0;
+		if (playerState == IDLE) {
+			this->momentum_x = -1.0;
+			playerState = LEFT;
+		}
+		else if (playerState == JUMPING) {
+			this->momentum_x = -0.5;
+		}
+		else if (playerState == RIGHT) {
+			this->momentum_x = 0.0;
+			this->playerState = IDLE;
+		}
 	}
 
 	void moveRight()
 	{
-		this->momentum_x =+ 1.0;
+		if (playerState == IDLE) {
+			this->momentum_x = 1.0;
+			playerState = RIGHT;
+		}
+		else if (playerState == JUMPING) {
+			this->momentum_x = 0.5;
+		}
+		else if (playerState == LEFT) {
+			this->momentum_x = 0.0;
+			this->playerState = IDLE;
+		}
 	}
 
 	void jump()
 	{
-		this->momentum_y += 1.0;
+		if (playerState == IDLE) {
+			this->momentum_x = 0.0;
+			this->momentum_y = 1.0;
+			this->playerState = JUMPING;
+		}
+		else if (playerState == RIGHT) {
+			this->momentum_x = 1.0;
+			this->momentum_y = 0.5;
+			this->playerState = JUMPING;
+		}
+		else if (playerState == LEFT) {
+			this->momentum_x = -1.0;
+			this->momentum_y = 0.5;
+			this->playerState = JUMPING;
+		}
+		else {
+			;; // when jumping jump does nothing.
+		}
+
 	}
 
 	void roll()
@@ -47,13 +95,13 @@ public:
 
 	void render(Camera* camP)
 	{
-		ScreenPosition itemPosSP{ 0,0 };
+		ScreenPosition position_screen;
 
-		auto p = camP->getMemCoords(); // <<xBeg, xEnd>, <yBeg, yEnd>>
-		int iBegin = p.first.first;
-		int iEnd = p.first.second;
-		int jBegin = p.second.first;
-		int jEnd = p.second.second;
+		position_screen = camP->camera2dTransform(&this->world_position);
+
+		al_draw_bitmap(spriteP, position_screen.x, position_screen.y, NULL);
 	}
+
+	void update(float deltaT);
 };
 
