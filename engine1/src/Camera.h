@@ -37,6 +37,7 @@ public:
 		return world_position;
 	}
 
-
+	// override: updateable: calls camera each frame
+	void update();
 };
 

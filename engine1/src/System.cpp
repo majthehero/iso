@@ -94,7 +94,7 @@ GameSystem::GameSystem(MessageBus* msgBus)
 
 GameSystem::~GameSystem()
 {
-
+	
 }
 
 void GameSystem::update(float deltaT)
@@ -110,7 +110,7 @@ void GameSystem::update(float deltaT)
 		std::vector<Message>::iterator> p = messages->getIterators();
 
 	for (; p.first != p.second; p.first++) {
-
+		
 		if (p.first->shouldRemove()) continue;
 
 		if (p.first->getDest() == SYS_GAME) {

@@ -9,7 +9,8 @@
 #include <allegro5\allegro_image.h>
 #include <allegro5\color.h>
 
-#include "Camera.h"
+#include "camera.h"
+#include "Util.h"
 
 extern ALLEGRO_FONT* base_font;
 
