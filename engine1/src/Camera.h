@@ -3,9 +3,8 @@
 #include<map>
 
 #include "Util.h"
-#include "Updateable.h"
 
-class Camera : public Updateable
+class Camera 
 {
 public:
 	/* manually init position */
@@ -37,7 +36,6 @@ public:
 		return world_position;
 	}
 
-	// override: updateable: calls camera each frame
-	void update();
+
 };
 

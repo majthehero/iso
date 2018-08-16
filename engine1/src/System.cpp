@@ -18,7 +18,7 @@ void System::setMessageBus(MessageBus * msgBusP)
 
 InputSystem::InputSystem(MessageBus* msgBus)
 {
-	int err;
+//	int err;
 	messages = msgBus;
 	eventQueue = al_create_event_queue();
 	al_register_event_source(eventQueue, al_get_keyboard_event_source());
