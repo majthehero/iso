@@ -46,7 +46,7 @@ InputSystem::~InputSystem()
 
 void InputSystem::update(float deltaT)
 {
-	// prepare msg
+	// prepare msg vit
 	Message msg;
 	msg.setDest(SYS_GAME);
 	// read input events
