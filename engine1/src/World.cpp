@@ -4,8 +4,7 @@
 
 Environment::Environment()
 {
-	// init camera
-	camera.setPosition(0.0f, 0.0f);
+
 }
 
 
@@ -20,7 +19,7 @@ WorldMap& Environment::getMap()
 
 Camera * Environment::getCamera()
 {
-	return &camera;
+	return & this->fat.camera;
 }
 
 void WorldMap::loadMap()

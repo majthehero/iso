@@ -72,9 +72,7 @@ class Environment
 {
 public:
 	WorldMap worldMap;
-	Camera camera;
 	Actor fat;
-	Actor slim;
 
 	Environment();
 	~Environment();

@@ -9,8 +9,8 @@
 #include <allegro5\allegro_image.h>
 #include <allegro5\color.h>
 
-#include "camera.h"
 #include "Util.h"
+#include "Camera.h"
 
 extern ALLEGRO_FONT* base_font;
 
@@ -45,6 +45,5 @@ public:
 	~RenderableObject();
 
 	virtual void render(Camera* camP);
-
 };
 

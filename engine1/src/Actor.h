@@ -2,6 +2,8 @@
 
 #include "Util.h"
 #include "RenderableObject.h"
+#include "Camera.h"
+
 
 class Actor : public RenderableObject
 {
@@ -12,7 +14,7 @@ public:
 	float momentum_x;
 	float momentum_y;
 
-	
+	Camera camera;
 
 	enum PlayerType {
 		FAT,
