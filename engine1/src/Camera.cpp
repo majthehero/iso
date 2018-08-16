@@ -88,3 +88,9 @@ void Camera::setPosition(float x, float y)
 	world_position.x = x;
 	world_position.y = y;
 }
+
+
+void Camera::update()
+{
+
+}

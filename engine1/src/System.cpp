@@ -55,27 +55,24 @@ void InputSystem::update(float deltaT)
 		if (event.type == ALLEGRO_EVENT_KEY_CHAR) {
 
 			if (event.keyboard.keycode == key_lut.key_down) {
-				msg.setComm(CMD_DOWN);
+				msg.setComm(CMD_FAT_DOWN);
 			}
 			else if (event.keyboard.keycode == key_lut.key_up) {
-				msg.setComm(CMD_UP);
+				msg.setComm(CMD_FAT_UP);
 			}
 			else if (event.keyboard.keycode == key_lut.key_left) {
-				msg.setComm(CMD_LEFT);
+				msg.setComm(CMD_FAT_LEFT);
 			}
 			else if (event.keyboard.keycode == key_lut.key_right) {
-				msg.setComm(CMD_RIGHT);
-			}
-			else if (event.keyboard.keycode == key_lut.key_action) {
-				msg.setComm(CMD_ACTION);
+				msg.setComm(CMD_FAT_RIGHT);
 			}
 		}
 		else if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
 			if (event.mouse.button == mouse_lut.mouseL) {
-				msg.setComm(CMD_LCLICK);
+				msg.setComm(CMD_ZOOM_IN);
 			}
 			else if (event.mouse.button == mouse_lut.mouseR) {
-				msg.setComm(CMD_RCLICK);
+				msg.setComm(CMD_ZOOM_OUT);
 			}
 		}
 		else {
@@ -109,36 +106,41 @@ void GameSystem::update(float deltaT)
 	WorldPosition move;
 
 	// read messages
-	std::pair < std::vector<Message>::iterator,
+	std::pair <std::vector<Message>::iterator,
 		std::vector<Message>::iterator> p = messages->getIterators();
+
 	for (; p.first != p.second; p.first++) {
+
 		if (p.first->shouldRemove()) continue;
+
 		if (p.first->getDest() == SYS_GAME) {
 			switch (p.first->getCommand()) {
-			case CMD_UP:
-				move.x = 0;
-				move.y = -0.333;
-				world->getCamera()->move(move);
+			
+			// FAT PLAYER MOVEMENT
+			case CMD_FAT_LEFT:
+				world->fat.moveLeft();
 				break;
-			case CMD_DOWN:
-				move.x = 0;
-				move.y = 0.333;
-				world->getCamera()->move(move);
+
+			case CMD_FAT_DOWN:
+				world->fat.roll();
 				break;
-			case CMD_LEFT:
-				move.x = -0.333;
-				move.y = 0;
-				world->getCamera()->move(move);
+
+			case CMD_FAT_RIGHT:
+				world->fat.moveRight();
 				break;
-			case CMD_RIGHT:
-				move.x = 0.333;
-				move.y = 0;
-				world->getCamera()->move(move);
+
+			case CMD_FAT_UP:
+				world->fat.jump();
 				break;
+
+			// SLIM PLAYER MOVEMENT
+
+			// camera control
 			case CMD_ZOOM_IN:
 				world->getCamera()->setScale(
 					world->getCamera()->getScale() / 0.8); 
 				break;
+			
 			case CMD_ZOOM_OUT:
 				world->getCamera()->setScale(
 					world->getCamera()->getScale() * 0.8);

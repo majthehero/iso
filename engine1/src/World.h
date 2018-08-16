@@ -20,10 +20,12 @@
 // WorldTile
 
 enum WORLD_TILE_TYPE {
-	TILE_TYPE_GRASS = 0,
-	TILE_TYPE_DIRT,
-	TILE_TYPE_WATER,
-	TILE_TYPE_WALL
+	TILE_TYPE_WALL = 0,
+	TILE_TYPE_AIR,
+	TILE_TYPE_FLOOR,
+	TILE_TYPE_PLAYER_SPAWN_FAT,
+	TILE_TYPE_PLAYER_SPAWN_SLIM,
+
 };
 
 class WorldTile
@@ -68,11 +70,12 @@ public:
 
 class Environment
 {
-private:
+public:
 	WorldMap worldMap;
 	Camera camera;
-	Actor player;
-public:
+	Actor fat;
+	Actor slim;
+
 	Environment();
 	~Environment();
 

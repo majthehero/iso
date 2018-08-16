@@ -167,7 +167,7 @@ void UISubSystem::update(float deltaT) // currently works as render for testing 
 
 	// draw fps count on top of all else
 	char fps_str[20];
-	sprintf(fps_str, "%d ", frames_per_second) < 0;
+	sprintf_s(fps_str, 20, "%d ", frames_per_second);
 	al_draw_text(base_font, al_map_rgb_f(1, 1, 1), 5, 5, NULL, fps_str);
 
 	// retuen allegro to normal state

@@ -26,14 +26,22 @@ int main()
 	al_init_image_addon();
 	al_init_primitives_addon();
 		
+
 	// set up messaging and memory
+	
 	MessageBus messageBus;
+	
 	// load systems
+	
 	InputSystem inputSystem(&messageBus);
 	GameSystem gameSystem(&messageBus);
+	
 	// render system inits allegro
+	
 	RenderSystem renderSystem(&messageBus);
+	
 	// world needs allegro to construct itself
+	
 	Environment world;
 	gameSystem.assignWorld(&world);
 	renderSystem.assignWorld(&world);

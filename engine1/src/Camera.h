@@ -3,14 +3,15 @@
 #include<map>
 
 #include "Util.h"
+#include "Updateable.h"
 
-class Camera
+class Camera : public Updateable
 {
-private:
+public:
 	/* manually init position */
 	WorldPosition world_position; 
 	float scale;
-public:
+
 	Camera();
 	~Camera();
 	
@@ -35,6 +36,7 @@ public:
 	WorldPosition getWorldPosition() {
 		return world_position;
 	}
+
 
 };
 

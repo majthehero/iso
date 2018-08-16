@@ -16,11 +16,11 @@ enum SYSTEM {
 enum COMMAND {
 	// input sends:
 	// kbd
-	CMD_UP,
-	CMD_RIGHT,
-	CMD_DOWN,
-	CMD_LEFT,
-	CMD_ACTION,
+	CMD_FAT_UP,
+	CMD_FAT_RIGHT,
+	CMD_FAT_DOWN,
+	CMD_FAT_LEFT,
+
 	// camera
 	CMD_ZOOM_IN,
 	CMD_ZOOM_OUT,

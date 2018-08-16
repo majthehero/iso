@@ -1,5 +1,7 @@
 #include "World.h"
 
+#include <iostream>
+
 Environment::Environment()
 {
 	// init camera
@@ -46,23 +48,35 @@ void WorldMap::loadMap()
 		std::getline(file, line);
 		for (char c : line) {
 			switch (c) {
-			case 'w':
+			case 'W':
 				wt.type = TILE_TYPE_WALL;
+				std::cout << "wall" << std::endl;
 				break;
-			case 'd':
-				wt.type = TILE_TYPE_DIRT;
+
+			case '.':
+				wt.type = TILE_TYPE_AIR;
 				break;
-			case 'g':
-				wt.type = TILE_TYPE_GRASS;
+
+			case '_':
+				wt.type = TILE_TYPE_FLOOR;
 				break;
-			case '-':
-				wt.type = TILE_TYPE_WATER;
+			
+			case 'P':
+				wt.type = TILE_TYPE_PLAYER_SPAWN_FAT;
+				break;
+
+			case 'p':
+				wt.type = TILE_TYPE_PLAYER_SPAWN_SLIM;
 				break;
 			}
 			world_map.push_back(wt);
 		}
 	}
 	
+	for (WorldTile wt : world_map) {
+		printf("%d\n", (int)wt.type);
+	}
+
 	file.close();
 }
 
@@ -70,21 +84,30 @@ WorldMap::WorldMap()
 {
 	// load assets
 	// !hardcode: load assets from file - why tho, it's kinda the same
-	ALLEGRO_BITMAP *bitmapP = al_load_bitmap("assets/grass.png");
-	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/grass.png" << std::endl;
-	assets.push_back(bitmapP);
-	bitmapP = al_load_bitmap("assets/dirt.png");
-	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/dirt.png" << std::endl;
-	assets.push_back(bitmapP);
-	bitmapP = al_load_bitmap("assets/water.png");
-	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/water.png" << std::endl;
-	assets.push_back(bitmapP);
-	bitmapP = al_load_bitmap("assets/wall.png");
+	
+	ALLEGRO_BITMAP *bitmapP = al_load_bitmap("assets/wall.png");
 	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/wall.png" << std::endl;
 	assets.push_back(bitmapP);
+	
+	bitmapP = al_load_bitmap("assets/others/Ceramic.png");
+	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/Ceramic.png" << std::endl;
+	assets.push_back(bitmapP);
+
+	bitmapP = al_load_bitmap("assets/grass.png");
+	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/grass.png" << std::endl;
+	assets.push_back(bitmapP);
+
+	bitmapP = al_load_bitmap("assets/others/AgentPlume.png");
+	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/AgentPlume.png" << std::endl;
+	assets.push_back(bitmapP);
+
+	bitmapP = al_load_bitmap("assets/others/AgentPlume2.0.png");
+	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/AgentPlume2.0.png" << std::endl;
+	assets.push_back(bitmapP);
+	
 		
 	// !placeholder: path to map - probably multiple maps, hot load
-	path_to_map = "map_demo.txt";
+	path_to_map = "assets/others/level0.map";
 	
 	//clear map and load from file
 	world_map.clear();
@@ -164,9 +187,9 @@ void WorldMap::render(Camera* camP)
 					NULL);
 
 			if (flags.devel) {
-				char * coords_str;
-				sprintf(coords_str, "%d,%d ", (int)itemPos.x, (int)itemPos.y);
-				if (!coords_str) coords_str = "err";
+				char coords_str[20];
+				sprintf_s(coords_str, 20,  "%d: %d,%d ", (int)wt.type, (int)itemPos.x, (int)itemPos.y);
+				if (!coords_str) sprintf_s(coords_str, 20, "err");
 				al_draw_text(base_font, fontC,
 					itemPosSP.x,		// dest x
 					itemPosSP.y,			//  y
