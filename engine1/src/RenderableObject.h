@@ -14,6 +14,9 @@
 
 extern ALLEGRO_FONT* base_font;
 
+extern Actor;
+extern WorldMap;
+
 class RenderableObject
 {
 protected:
@@ -47,3 +50,30 @@ public:
 	virtual void render(Camera* camP);
 };
 
+class Collider
+{
+protected:
+
+public:
+
+	Collider();
+	~Collider();
+
+	virtual bool collide(Actor a);
+	virtual bool collide(WorldMap map);
+	virtual bool collide(GameObject obj); // TODO implement GameObject
+
+};
+
+class GameObject {
+protected:
+
+public:
+
+	GameObject();
+	~GameObject();
+
+	virtual void effect(Actor a);
+	virtual void effect(WorldMap map);
+	virtual void effect(GameObject obj); 
+};
