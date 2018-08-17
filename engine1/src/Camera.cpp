@@ -35,10 +35,10 @@ std::pair<std::pair<int, int>, std::pair<int, int>> Camera::getMemCoords()
 	float y1 = cY - tilesY;
 	float y2 = cY + tilesY;
 	// round away from 0 to include partially visible tiles
-	int xL = std::floor(x1);
-	int xR = std::ceil(x2);
-	int yU = std::floor(y1);
-	int yD = std::ceil(y2);
+	int xL = (int) std::floor(x1);
+	int xR = (int) std::ceil(x2);
+	int yU = (int) std::floor(y1);
+	int yD = (int) std::ceil(y2);
 
 	// return object pair<pair<>>
 	std::pair<std::pair<int, int>, std::pair<int, int>> p;
@@ -89,8 +89,3 @@ void Camera::setPosition(float x, float y)
 	world_position.y = y;
 }
 
-
-void Camera::update()
-{
-
-}

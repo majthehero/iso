@@ -1,13 +1,23 @@
 #include "World.h"
 
 #include <iostream>
+#include "game_object/Trap.h"
+#include "game_object/Exit.h"
+
+// environment
 
 Environment::Environment()
 {
-	// init camera
-	camera.setPosition(0.0f, 0.0f);
-}
+	printf("Environment constructor. Loading assets.");
+	
+	player_asset = al_load_bitmap("assets/Others/AgentPlume1.png");
+	if (!player_asset) 
+		std::cerr << "ERROR: asset load failed: assets/others/AgentPlume1.png" << std::endl;
 
+	trap_asset = al_load_bitmap("assets/Animated/trap_animateds.png");
+
+	fat.setSprite(player_asset);
+}
 
 Environment::~Environment()
 {
@@ -20,11 +30,16 @@ WorldMap& Environment::getMap()
 
 Camera * Environment::getCamera()
 {
-	return &camera;
+	return & this->fat.camera;
 }
+
+
+// world map
 
 void WorldMap::loadMap()
 {
+	printf("	Loading map.");
+
 	// open file
 	std::ifstream file;
 	file.open(path_to_map);
@@ -42,7 +57,6 @@ void WorldMap::loadMap()
 	
 	// prepare tile
 	WorldTile wt;
-
 	// read map by char
 	for (int i = 0; i < size_y; i++) {
 		std::getline(file, line);
@@ -50,26 +64,40 @@ void WorldMap::loadMap()
 			switch (c) {
 			case 'W':
 				wt.type = TILE_TYPE_WALL;
-				std::cout << "wall" << std::endl;
+				//std::cout << "wall" << std::endl;
+				world_map.push_back(wt);
 				break;
 
 			case '.':
 				wt.type = TILE_TYPE_AIR;
+				world_map.push_back(wt);
 				break;
 
 			case '_':
 				wt.type = TILE_TYPE_FLOOR;
+				world_map.push_back(wt);
 				break;
 			
 			case 'P':
 				wt.type = TILE_TYPE_PLAYER_SPAWN_FAT;
+				world_map.push_back(wt);
 				break;
 
 			case 'p':
 				wt.type = TILE_TYPE_PLAYER_SPAWN_SLIM;
+				world_map.push_back(wt);
 				break;
+
+			case 'T':
+				Trap trap = Trap(); // TODO put it in place
+				
+				this->objects.push_back((Object)trap);
+				break;
+
+			case 'X':
+				Exit exit = Exit(); // TODO put it in place 
 			}
-			world_map.push_back(wt);
+			
 		}
 	}
 	
@@ -82,6 +110,8 @@ void WorldMap::loadMap()
 
 WorldMap::WorldMap()
 {
+	printf("WorldMap constructor.");
+
 	// load assets
 	// !hardcode: load assets from file - why tho, it's kinda the same
 	
@@ -89,23 +119,23 @@ WorldMap::WorldMap()
 	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/wall.png" << std::endl;
 	assets.push_back(bitmapP);
 	
-	bitmapP = al_load_bitmap("assets/others/Ceramic.png");
-	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/Ceramic.png" << std::endl;
+	bitmapP = al_load_bitmap("assets/Others/Air.png");
+	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/Air.png" << std::endl;
 	assets.push_back(bitmapP);
 
 	bitmapP = al_load_bitmap("assets/grass.png");
 	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/grass.png" << std::endl;
 	assets.push_back(bitmapP);
 
-	bitmapP = al_load_bitmap("assets/others/AgentPlume.png");
-	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/AgentPlume.png" << std::endl;
+	bitmapP = al_load_bitmap("assets/Others/AgentPlume0.png");
+	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/AgentPlume0.png" << std::endl;
 	assets.push_back(bitmapP);
 
-	bitmapP = al_load_bitmap("assets/others/AgentPlume2.0.png");
-	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/AgentPlume2.0.png" << std::endl;
+	bitmapP = al_load_bitmap("assets/Others/AgentPlume1.png");
+	if (!bitmapP) std::cerr << "ERROR: asset load failed: assets/others/AgentPlume1.png" << std::endl;
 	assets.push_back(bitmapP);
-	
-		
+
+
 	// !placeholder: path to map - probably multiple maps, hot load
 	path_to_map = "assets/others/level0.map";
 	

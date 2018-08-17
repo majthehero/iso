@@ -19,7 +19,8 @@ void RenderSystem::render()
 	// clear frame
 	al_clear_to_color(al_map_rgba(0, 0, 0, 0));
 	// render game
-	world->getMap().render(world->getCamera());
+	world->getMap().render(&world->fat.camera);
+	world->fat.render(&world->fat.camera);
 
 	// update ui 
 	ui_system.update();

@@ -25,7 +25,8 @@ int main()
 	al_init_ttf_addon();
 	al_init_image_addon();
 	al_init_primitives_addon();
-		
+	
+	printf("Allegro initialized.");
 
 	// set up messaging and memory
 	
@@ -42,7 +43,7 @@ int main()
 	
 	// world needs allegro to construct itself
 	
-	Environment world;
+	Environment world = Environment();
 	gameSystem.assignWorld(&world);
 	renderSystem.assignWorld(&world);
 		

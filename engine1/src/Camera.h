@@ -3,9 +3,8 @@
 #include<map>
 
 #include "Util.h"
-#include "Updateable.h"
 
-class Camera : public Updateable
+class Camera 
 {
 public:
 	/* manually init position */

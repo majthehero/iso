@@ -1,10 +1,11 @@
 #include "System.h"
 
 
+// system
+
 System::System()
 {
 }
-
 
 System::~System()
 {
@@ -16,9 +17,11 @@ void System::setMessageBus(MessageBus * msgBusP)
 }
 
 
+// input system
+
 InputSystem::InputSystem(MessageBus* msgBus)
 {
-	int err;
+//	int err;
 	messages = msgBus;
 	eventQueue = al_create_event_queue();
 	al_register_event_source(eventQueue, al_get_keyboard_event_source());
@@ -35,13 +38,11 @@ InputSystem::InputSystem(MessageBus* msgBus)
 
 }
 
-
 InputSystem::~InputSystem()
 {
 	al_unregister_event_source(eventQueue, al_get_keyboard_event_source());
 	al_unregister_event_source(eventQueue, al_get_mouse_event_source());
 	al_destroy_event_queue(eventQueue);
-
 }
 
 void InputSystem::update(float deltaT)
@@ -85,16 +86,16 @@ void InputSystem::update(float deltaT)
 }
 
 
+// game system
+
 GameSystem::GameSystem(MessageBus* msgBus)
 {
 	messages = msgBus;
-
 }
-
 
 GameSystem::~GameSystem()
 {
-
+	
 }
 
 void GameSystem::update(float deltaT)
@@ -110,10 +111,15 @@ void GameSystem::update(float deltaT)
 		std::vector<Message>::iterator> p = messages->getIterators();
 
 	for (; p.first != p.second; p.first++) {
-
+		
 		if (p.first->shouldRemove()) continue;
 
 		if (p.first->getDest() == SYS_GAME) {
+			
+			// DEBUG print all messages
+			printf("dest: %d, CMD: %d", p.first->getDest(),
+					p.first->getCommand());
+			
 			switch (p.first->getCommand()) {
 			
 			// FAT PLAYER MOVEMENT
@@ -149,7 +155,14 @@ void GameSystem::update(float deltaT)
 
 			p.first->mark_remove();
 		}
+
 	}
+
+	// update actor physics
+	world->fat.update(deltaT);
+
+	// update objects
+
 	// send render command
 	msg.setDest(SYS_RENDER);
 	msg.setComm(CMD_RENDER);

@@ -9,9 +9,17 @@
 #include <allegro5\allegro_image.h>
 #include <allegro5\color.h>
 
+#include "Util.h"
 #include "Camera.h"
 
 extern ALLEGRO_FONT* base_font;
+
+
+class Object
+{
+public:
+	virtual void update(float deltaT) {};
+};
 
 class RenderableObject
 {
@@ -19,7 +27,7 @@ protected:
 	ALLEGRO_BITMAP* empty_sprite;
 	ALLEGRO_COLOR backC;
 	ALLEGRO_COLOR fontC;
-	
+
 	typedef struct {
 		bool render;
 		bool devel; // will render id on object
@@ -43,7 +51,44 @@ public:
 	RenderableObject(); // vse podaj? setterji bolje, da lahko sistemi lepo nastavijo vse?
 	~RenderableObject();
 
-	virtual void render(Camera* camP);
+	virtual void render(Camera* camP) = 0;
+	virtual void setSprite(ALLEGRO_BITMAP* spriteP) 
+	{ 
+		this->spriteP = spriteP;
+	};
 
 };
 
+class Collider
+{
+public:
+
+	typedef struct {
+		float min_x;
+		float max_x;
+		float min_y;
+		float max_y;
+	} BoundingBox;
+
+	BoundingBox boundingBox;
+
+public:
+
+	Collider() {};
+	~Collider() {};
+
+	virtual bool collide(Collider* col) = 0;
+
+};
+
+class GameObject
+{
+protected:
+
+public:
+
+	GameObject() {};
+	~GameObject() {};
+
+	virtual void effect(GameObject* obj) = 0; 
+};

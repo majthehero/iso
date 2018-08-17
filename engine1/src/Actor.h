@@ -2,17 +2,24 @@
 
 #include "Util.h"
 #include "RenderableObject.h"
+#include "Camera.h"
 
-class Actor : public RenderableObject
+
+class Actor : 
+	public RenderableObject,
+	public GameObject,
+	public Collider
 {
 public:
 	Actor();
 	~Actor();
 
-	float momentum_x;
-	float momentum_y;
+	void setSprite(ALLEGRO_BITMAP* spriteP);
 
-	
+	float momentum_x = 0.0f;
+	float momentum_y = 0.0f;
+
+	Camera camera;
 
 	enum PlayerType {
 		FAT,
@@ -21,21 +28,88 @@ public:
 
 	enum PlayerType playerType;
 
-	// execute game space commands
-	
-	void moveLeft() 
+	enum PlayerState {
+		IDLE,
+		JUMPING,
+		LEFT,
+		RIGHT
+	};
+	PlayerState playerState = IDLE;
+
+	// renderable object
+
+	void render(Camera* camP);
+
+	// game object
+
+	void effect(GameObject* obj);
+
+	// collider
+
+	bool collide(Collider* col)
 	{
-		this->momentum_x -= 1.0;
+		if (this->boundingBox.max_x > col->boundingBox.min_x &&
+			this->boundingBox.min_x < col->boundingBox.max_x &&
+			this->boundingBox.max_y > col->boundingBox.min_y &&
+			this->boundingBox.min_y < col->boundingBox.min_y)
+		{
+			return true;
+		}
+	}
+
+	// Actor methods
+
+	void moveLeft()
+	{
+		if (playerState == IDLE) {
+			this->momentum_x = -1.0;
+			playerState = LEFT;
+		}
+		else if (playerState == JUMPING) {
+			this->momentum_x = -0.5;
+		}
+		else if (playerState == RIGHT) {
+			this->momentum_x = 0.0;
+			this->playerState = IDLE;
+		}
 	}
 
 	void moveRight()
 	{
-		this->momentum_x =+ 1.0;
+		if (playerState == IDLE) {
+			this->momentum_x = 1.0;
+			playerState = RIGHT;
+		}
+		else if (playerState == JUMPING) {
+			this->momentum_x = 0.5;
+		}
+		else if (playerState == LEFT) {
+			this->momentum_x = 0.0;
+			this->playerState = IDLE;
+		}
 	}
 
 	void jump()
 	{
-		this->momentum_y += 1.0;
+		if (playerState == IDLE) {
+			this->momentum_x = 0.0;
+			this->momentum_y = 1.0;
+			this->playerState = JUMPING;
+		}
+		else if (playerState == RIGHT) {
+			this->momentum_x = 1.0;
+			this->momentum_y = 0.5;
+			this->playerState = JUMPING;
+		}
+		else if (playerState == LEFT) {
+			this->momentum_x = -1.0;
+			this->momentum_y = 0.5;
+			this->playerState = JUMPING;
+		}
+		else {
+			;; // when jumping jump does nothing.
+		}
+
 	}
 
 	void roll()
@@ -43,15 +117,8 @@ public:
 		;;
 	}
 
-	void render(Camera* camP)
-	{
-		ScreenPosition itemPosSP{ 0,0 };
+	
 
-		auto p = camP->getMemCoords(); // <<xBeg, xEnd>, <yBeg, yEnd>>
-		int iBegin = p.first.first;
-		int iEnd = p.first.second;
-		int jBegin = p.second.first;
-		int jEnd = p.second.second;
-	}
+	void update(float deltaT);
 };
 
