@@ -1,10 +1,12 @@
-
+#include "../RenderableObject.h"
+#include "../World.h"
 
 class Exit :
 	public Object,
 	public RenderableObject,
 	public Collider,
-	public GameObject
+	public GameObject,
+	public WORLD_ACCESS
 {
 
 	Exit();
@@ -16,7 +18,7 @@ class Exit :
 	void render(Camera* camP) override;
 
 	// collider
-	void collide(Collider col) override;
+	bool collide(Collider* col) override;
 
 	// effector
 	void effect(GameObject* obj) override;

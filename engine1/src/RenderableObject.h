@@ -18,10 +18,10 @@ extern ALLEGRO_FONT* base_font;
 class Object
 {
 public:
-	virtual void update();
+	virtual void update(float deltaT) {};
 };
 
-class RenderableObject : public Object
+class RenderableObject
 {
 protected:
 	ALLEGRO_BITMAP* empty_sprite;
@@ -51,12 +51,15 @@ public:
 	RenderableObject(); // vse podaj? setterji bolje, da lahko sistemi lepo nastavijo vse?
 	~RenderableObject();
 
-	virtual void render(Camera* camP);
-	virtual void setSprinte(ALLEGRO_BITMAP* spriteP);
+	virtual void render(Camera* camP) = 0;
+	virtual void setSprite(ALLEGRO_BITMAP* spriteP) 
+	{ 
+		this->spriteP = spriteP;
+	};
 
 };
 
-class Collider : public Object
+class Collider
 {
 public:
 
@@ -71,21 +74,21 @@ public:
 
 public:
 
-	Collider();
-	~Collider();
+	Collider() {};
+	~Collider() {};
 
-	virtual bool collide(Collider* col);
+	virtual bool collide(Collider* col) = 0;
 
 };
 
-class GameObject : Object
+class GameObject
 {
 protected:
 
 public:
 
-	GameObject();
-	~GameObject();
+	GameObject() {};
+	~GameObject() {};
 
-	virtual void effect(GameObject* obj); 
+	virtual void effect(GameObject* obj) = 0; 
 };

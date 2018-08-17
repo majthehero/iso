@@ -4,21 +4,20 @@
 #include "../Util.h"
 
 class Trap : 
+	public Object,
 	public RenderableObject,
 	public Collider,
 	public GameObject,
 	public WORLD_ACCESS
 {
-
 public:
 	Trap() 
 	{
 		this->spriteP = world->trap_asset;
 	}
 
-	Trap(float pos_x, float pos_y) 
-	{
-		Trap();
+	Trap(float pos_x, float pos_y) : Trap()
+	{	
 		this->world_position.x = pos_x;
 		this->world_position.y = pos_y;
 		this->sprite_size.first = 64;
@@ -28,6 +27,8 @@ public:
 	}
 
 	// object
+
+	void update(float deltaT);
 
 	// renderable
 
@@ -64,5 +65,9 @@ public:
 
 	// effector
 
-	// collidor
+	void effect(GameObject* obj) override;
+
+	// collider
+	
+	bool collide(Collider* col) override;
 };

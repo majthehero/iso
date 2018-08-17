@@ -11,7 +11,8 @@ Environment::Environment()
 	printf("Environment constructor. Loading assets.");
 	
 	player_asset = al_load_bitmap("assets/Others/AgentPlume1.png");
-	if (!player_asset) std::cerr << "ERROR: asset load failed: assets/others/AgentPlume1.png" << std::endl;
+	if (!player_asset) 
+		std::cerr << "ERROR: asset load failed: assets/others/AgentPlume1.png" << std::endl;
 
 	trap_asset = al_load_bitmap("assets/Animated/trap_animateds.png");
 
@@ -56,7 +57,6 @@ void WorldMap::loadMap()
 	
 	// prepare tile
 	WorldTile wt;
-	Object obj;
 	// read map by char
 	for (int i = 0; i < size_y; i++) {
 		std::getline(file, line);
@@ -89,13 +89,13 @@ void WorldMap::loadMap()
 				break;
 
 			case 'T':
-				obj = Trap(); // TODO put it in place
+				Trap trap = Trap(); // TODO put it in place
 				
-				this->objects.push_back(obj);
+				this->objects.push_back((Object)trap);
 				break;
 
 			case 'X':
-				obj = Exit(); // TODO put it in place 
+				Exit exit = Exit(); // TODO put it in place 
 			}
 			
 		}

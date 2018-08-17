@@ -80,6 +80,7 @@ public:
 	Actor fat;
 	ALLEGRO_BITMAP* player_asset;
 	ALLEGRO_BITMAP* trap_asset;
+	ALLEGRO_BITMAP* exit_asset;
 
 	Environment();
 	~Environment();
