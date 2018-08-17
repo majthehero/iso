@@ -1,5 +1,8 @@
 #include "../RenderableObject.h"
 
+#include "World.h"
+#include "../Util.h"
+
 class Trap : 
 	public RenderableObject,
 	public Collider,
@@ -10,7 +13,7 @@ class Trap :
 public:
 	Trap() 
 	{
-		this->spriteP = this->world.trap_asset;
+		this->spriteP = world->trap_asset;
 	}
 
 	Trap(float pos_x, float pos_y) 
@@ -21,23 +24,25 @@ public:
 		this->sprite_size.first = 64;
 		this->sprite_size.second = 64;
 		this->sprite_scale.first = 1.0;
-		this->sprite_scale.second = 1.0;s
+		this->sprite_scale.second = 1.0;
 	}
 
-	// renderable object overrides
+	// object
+
+	// renderable
 
 	void render(Camera* camP) override 
 	{
 		float srcScale = TILE_SIZE;
 		float destScale = TILE_SIZE * camP->getScale();
 
-		itemPos.x = this->world_position.x;
-		itemPos.y = this->world_position.y;
-		itemPosSP = camP->camera2dTransform(&itemPos);
+		float ws_pos_x = this->world_position.x;
+		float ws_pos_y = this->world_position.y;
+		ScreenPosition itemPosSP = camP->camera2dTransform(&WorldPosition(ws_pos_x, ws_pos_y));
 
 		if (flags.render)
 			al_draw_scaled_bitmap(
-				assets.at(wt.type),		// bitmap
+				this->spriteP,		// bitmap
 				0, 0,					// src xy
 				srcScale, srcScale,		// src scale
 				itemPosSP.x,		// dest x
@@ -47,7 +52,7 @@ public:
 
 		if (flags.devel) {
 			char coords_str[20];
-			sprintf_s(coords_str, 20, "%d: %d,%d ", (int)wt.type, (int)itemPos.x, (int)itemPos.y);
+			sprintf_s(coords_str, 12, "Trap: %d,%d ", (int)ws_pos_x, (int)ws_pos_y);
 			if (!coords_str) sprintf_s(coords_str, 20, "err");
 			al_draw_text(base_font, fontC,
 				itemPosSP.x,		// dest x
@@ -56,4 +61,8 @@ public:
 				coords_str);		// text c string
 		}
 	}
+
+	// effector
+
+	// collidor
 };

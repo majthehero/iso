@@ -74,7 +74,7 @@ public:
 	Collider();
 	~Collider();
 
-	virtual bool collide(Collider col);
+	virtual bool collide(Collider* col);
 
 };
 
@@ -87,5 +87,5 @@ public:
 	GameObject();
 	~GameObject();
 
-	virtual void effect(GameObject obj); 
+	virtual void effect(GameObject* obj); 
 };
