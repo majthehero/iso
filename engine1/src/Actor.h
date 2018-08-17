@@ -6,6 +6,7 @@
 
 
 class Actor : 
+	public Object,
 	public RenderableObject,
 	public GameObject,
 	public Collider

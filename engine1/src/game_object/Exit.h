@@ -8,7 +8,7 @@ class Exit :
 	public GameObject,
 	public WORLD_ACCESS
 {
-
+public:
 	Exit();
 
 	// object

@@ -57,45 +57,59 @@ void WorldMap::loadMap()
 	
 	// prepare tile
 	WorldTile wt;
+	Trap trap;
+	Exit exit;
+
 	// read map by char
 	for (int i = 0; i < size_y; i++) {
 		std::getline(file, line);
 		for (char c : line) {
 			switch (c) {
 			case 'W':
+				
 				wt.type = TILE_TYPE_WALL;
-				//std::cout << "wall" << std::endl;
 				world_map.push_back(wt);
 				break;
 
 			case '.':
+				
 				wt.type = TILE_TYPE_AIR;
 				world_map.push_back(wt);
 				break;
 
 			case '_':
+				
 				wt.type = TILE_TYPE_FLOOR;
 				world_map.push_back(wt);
 				break;
 			
 			case 'P':
+				
 				wt.type = TILE_TYPE_PLAYER_SPAWN_FAT;
 				world_map.push_back(wt);
 				break;
 
 			case 'p':
+				
 				wt.type = TILE_TYPE_PLAYER_SPAWN_SLIM;
 				world_map.push_back(wt);
 				break;
 
 			case 'T':
-				Trap trap = Trap(); // TODO put it in place
-				
+
+				trap.world_position.x = (float)(i % this->size_x);
+				trap.world_position.y = (float) (i / this->size_y);
+
 				this->objects.push_back((Object)trap);
 				break;
 
 			case 'X':
-				Exit exit = Exit(); // TODO put it in place 
+
+				trap.world_position.x = (float)(i % this->size_x);
+				trap.world_position.y = (float)(i / this->size_y);
+
+				this->objects.push_back((Object)trap);
+				break;
 			}
 			
 		}
