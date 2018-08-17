@@ -60,8 +60,7 @@ void Actor::render(Camera* camP)
 
 	if (flags.devel) {
 		char coords_str[20];
-		sprintf_s(coords_str, 12, "Actor
-: %d,%d ", (int)ws_pos_x, (int)ws_pos_y);
+		sprintf_s(coords_str, 12, "Actor: %d,%d ", (int)ws_pos_x, (int)ws_pos_y);
 		if (!coords_str) sprintf_s(coords_str, 20, "err");
 		al_draw_text(base_font, fontC,
 			itemPosSP.x,		// dest x
@@ -76,10 +75,34 @@ bool Actor::collide(Collider* col)
 {
 	// note: actor collides by setting directional collision to self - to update self correctly
 	
-	// check if not collision
-	if (this->boundingBox.max_x < col->boundingBox.min_x 
-		this->boundingBox.min_x > col->boundingBox.max_x 
+	// first check for collision
+	if (this->boundingBox.max_x > col->boundingBox.min_x &&
+		this->boundingBox.min_x < col->boundingBox.max_x &&
+		this->boundingBox.max_y > col->boundingBox.min_y &&
+		this->boundingBox.min_y < col->boundingBox.min_y)
+	{
+		// find direction of collision
+		
+		left_touch = this->boundingBox.min_x > col->boundingBox.max_x;
+		right_touch = this->boundingBox.max_x < col->boundingBox.min_x;
+		top_touch = this->boundingBox.max_y > col->boundingBox.min_x;
+		down_touch = this->boundingBox.min_y < col->boundingBox.max_x;
+
+		// return collision
+		return true;
+	}
+
+	// no collision - no direction of no collision
+	left_touch = false;
+	right_touch = false;
+	top_touch = false;
+	down_touch = false;
+
+	return false;
 }
 
 // effector
+void Actor::effect(GameObject* obj)
+{
 
+}
