@@ -1,38 +1,42 @@
+#pragma once
+
 #include "../RenderableObject.h"
 
-#include "World.h"
 #include "../Util.h"
 
 class Trap : 
 	public Object,
 	public RenderableObject,
 	public Collider,
-	public GameObject,
-	public WORLD_ACCESS
+	public GameObject
 {
-public:
-	Trap() 
-	{
-		this->spriteP = world->trap_asset;
-	}
+private:
+	float since_frame_one = 0;
 
-	Trap(float pos_x, float pos_y) : Trap()
-	{	
+
+public:
+	Trap() {};
+	Trap(float pos_x, float pos_y)
+	{
 		this->world_position.x = pos_x;
 		this->world_position.y = pos_y;
 		this->sprite_size.first = 64;
 		this->sprite_size.second = 64;
 		this->sprite_scale.first = 1.0;
 		this->sprite_scale.second = 1.0;
-	}
+		this->objectType = deal_damage;
+	};
 
 	// object
 
-	void update(float deltaT);
+	void update(float deltaT)
+	{
+		;;
+	};
 
 	// renderable
 
-	void render(Camera* camP) override 
+	void render(Camera* camP) override
 	{
 		float srcScale = TILE_SIZE;
 		float destScale = TILE_SIZE * camP->getScale();
@@ -61,13 +65,27 @@ public:
 				NULL,				// flags
 				coords_str);		// text c string
 		}
-	}
+	};
+
+	void setSprite(ALLEGRO_BITMAP* spriteP) override
+	{
+		this->spriteP = spriteP;
+	};
 
 	// effector
 
-	void effect(GameObject* obj) override;
+	void effect(GameObject* obj) override
+	{
+		if (obj->objectType & receive_damage)
+		{
+			// this is stupid. fix it
+		}
+	};
 
 	// collider
 	
-	bool collide(Collider* col) override;
+	bool collide(Collider* col) override
+	{
+		return false;
+	};
 };

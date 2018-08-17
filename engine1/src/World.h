@@ -16,6 +16,8 @@
 #include "RenderableObject.h"
 #include "Util.h"
 #include "Actor.h"
+#include "game_object/Trap.h"
+#include "game_object/Exit.h"
 
 // WorldTile
 
@@ -45,23 +47,30 @@ public:
 class WorldMap : public RenderableObject
 {
 private:
+
 	int size_x;
 	int size_y;
+
 	std::string path_to_map;
-	std::vector<ALLEGRO_BITMAP*> assets; // !slow? want contigous memory
+	std::vector<ALLEGRO_BITMAP*> assets;
 	
-	std::vector<WorldTile> world_map; 
-	std::vector<Object> objects;
+	std::vector<WorldTile*> world_map; 
+	std::vector<Object*> objects;
 
 	void loadMap();
+
 public:
 	WorldMap();
 	WorldMap(std::string pathToMap);
 	~WorldMap();
 
 	WorldTile& getTile(int x, int y);
-	std::pair<std::vector<WorldTile>::iterator,
-		std::vector<WorldTile>::iterator> getMapIterators();
+	std::pair
+		<
+		std::vector<WorldTile*>::iterator,
+		std::vector<WorldTile*>::iterator
+		> 
+		getMapIterators();
 
 	std::vector<ALLEGRO_BITMAP*>& getAssets();
 
@@ -97,5 +106,4 @@ protected:
 	Environment* world;  // !todo: replace pointer with something a bit smarter
 public:
 	void assignWorld(Environment* w);
-
 };

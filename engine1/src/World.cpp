@@ -1,8 +1,6 @@
-#include "World.h"
+#pragma once
 
-#include <iostream>
-#include "game_object/Trap.h"
-#include "game_object/Exit.h"
+#include "World.h"
 
 // environment
 
@@ -33,7 +31,6 @@ Camera * Environment::getCamera()
 	return & this->fat.camera;
 }
 
-
 // world map
 
 void WorldMap::loadMap()
@@ -56,53 +53,68 @@ void WorldMap::loadMap()
 	size_y = std::stoi(line);
 	
 	// prepare tile
-	WorldTile wt;
+	WorldTile* wtP = new WorldTile();
+	Trap* trapP = new Trap();
+	Exit* exitP = new Exit();
+	// THIS IS A MEMORY LEAK - MUST DELETE THOSE TWO OF WT; TRAP; EXIT NOT USED
+
 	// read map by char
 	for (int i = 0; i < size_y; i++) {
 		std::getline(file, line);
 		for (char c : line) {
 			switch (c) {
 			case 'W':
-				wt.type = TILE_TYPE_WALL;
-				//std::cout << "wall" << std::endl;
-				world_map.push_back(wt);
+				
+				wtP->type = TILE_TYPE_WALL;
+				world_map.push_back(wtP);
 				break;
 
 			case '.':
-				wt.type = TILE_TYPE_AIR;
-				world_map.push_back(wt);
+				
+				wtP->type = TILE_TYPE_AIR;
+				world_map.push_back(wtP);
 				break;
 
 			case '_':
-				wt.type = TILE_TYPE_FLOOR;
-				world_map.push_back(wt);
+				
+				wtP->type = TILE_TYPE_FLOOR;
+				world_map.push_back(wtP);
 				break;
 			
 			case 'P':
-				wt.type = TILE_TYPE_PLAYER_SPAWN_FAT;
-				world_map.push_back(wt);
+				
+				wtP->type = TILE_TYPE_PLAYER_SPAWN_FAT;
+				world_map.push_back(wtP);
 				break;
 
 			case 'p':
-				wt.type = TILE_TYPE_PLAYER_SPAWN_SLIM;
-				world_map.push_back(wt);
+				
+				wtP->type = TILE_TYPE_PLAYER_SPAWN_SLIM;
+				world_map.push_back(wtP);
 				break;
 
 			case 'T':
-				Trap trap = Trap(); // TODO put it in place
-				
-				this->objects.push_back((Object)trap);
+
+				trapP->world_position.x = (float)(i % this->size_x);
+				trapP->world_position.y = (float) (i / this->size_y);
+
+				this->objects.push_back((Object*)trapP);
 				break;
 
 			case 'X':
-				Exit exit = Exit(); // TODO put it in place 
+
+				trapP->world_position.x = (float)(i % this->size_x);
+				trapP->world_position.y = (float)(i / this->size_y);
+
+				this->objects.push_back((Object*)trapP);
+				break;
 			}
 			
 		}
 	}
 	
-	for (WorldTile wt : world_map) {
-		printf("%d\n", (int)wt.type);
+	for (WorldTile* wt : world_map) {
+		printf("%d\n", (int)wt->type);
 	}
 
 	file.close();
@@ -154,19 +166,26 @@ WorldMap::WorldMap(std::string pathToMap)
 WorldMap::~WorldMap()
 {
 	for (auto wt : world_map) {
-		al_destroy_bitmap(assets.at(wt.type));
+		al_destroy_bitmap(assets.at(wt->type));
 	}
 }
 
 WorldTile & WorldMap::getTile(int x, int y)
 {
-	return world_map.at(x + size_x * y);
+	return *(world_map.at(x + size_x * y)); // TODO WTF ??? 
 }
 
-std::pair<std::vector<WorldTile>::iterator, std::vector<WorldTile>::iterator> WorldMap::getMapIterators()
+std::pair
+	<
+	std::vector<WorldTile*>::iterator, 
+	std::vector<WorldTile*>::iterator
+	> 
+	WorldMap::getMapIterators()
 {
-	std::pair<std::vector<WorldTile>::iterator,
-		std::vector<WorldTile>::iterator> p;
+	std::pair
+		<std::vector<WorldTile*>::iterator,
+		std::vector<WorldTile*>::iterator> 
+		p;
 	p.first = world_map.begin();
 	p.second = world_map.end();
 	return p;

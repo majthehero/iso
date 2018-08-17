@@ -37,7 +37,7 @@ protected:
 
 	Flags flags;
 
-
+public:
 	WorldPosition world_position;
 	ALLEGRO_BITMAP* spriteP;
 	std::pair<int, int> sprite_size; // asset file size - resolution xy
@@ -83,7 +83,14 @@ public:
 
 class GameObject
 {
-protected:
+public:
+
+	enum ObjectType { // keep bit-objand-able
+		deal_damage			= 0b0001,
+		receive_damage		= 0b0010,
+	};
+
+	ObjectType objectType;
 
 public:
 

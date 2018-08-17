@@ -6,18 +6,27 @@
 
 
 class Actor : 
+	public Object,
 	public RenderableObject,
 	public GameObject,
 	public Collider
 {
+private:
+	// collision data - useful during update to stop movement into object etc
+	bool left_touch = false;
+	bool right_touch = false;
+	bool top_touch = false;
+	bool down_touch = false;
+
+	// update data
+	float momentum_x = 0.0f;
+	float momentum_y = 0.0f;
+
 public:
 	Actor();
 	~Actor();
 
 	void setSprite(ALLEGRO_BITMAP* spriteP);
-
-	float momentum_x = 0.0f;
-	float momentum_y = 0.0f;
 
 	Camera camera;
 
@@ -46,16 +55,7 @@ public:
 
 	// collider
 
-	bool collide(Collider* col)
-	{
-		if (this->boundingBox.max_x > col->boundingBox.min_x &&
-			this->boundingBox.min_x < col->boundingBox.max_x &&
-			this->boundingBox.max_y > col->boundingBox.min_y &&
-			this->boundingBox.min_y < col->boundingBox.min_y)
-		{
-			return true;
-		}
-	}
+	bool collide(Collider* col);
 
 	// Actor methods
 
