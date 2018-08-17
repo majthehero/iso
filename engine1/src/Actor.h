@@ -5,7 +5,10 @@
 #include "Camera.h"
 
 
-class Actor : public RenderableObject
+class Actor : 
+	public RenderableObject,
+	public GameObject,
+	public Collider
 {
 public:
 	Actor();
@@ -33,7 +36,24 @@ public:
 	};
 	PlayerState playerState = IDLE;
 
-	// execute game space commands
+	// renderable object
+
+	// game object
+
+	// collider
+
+	void collide(Collider col)
+	{
+		if (this.max_x > col.min_x &&
+			this.min_x < col.max_x &&
+			this.max_y > col.min_y &&
+			this.min_y < col.min_y)
+		{
+			return true;
+		}
+	}
+
+	// Actor methods
 
 	void moveLeft()
 	{

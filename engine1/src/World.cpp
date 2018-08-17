@@ -7,9 +7,12 @@
 
 Environment::Environment()
 {
-	printf("Environment constructor.");
+	printf("Environment constructor. Loading assets.");
+	
 	player_asset = al_load_bitmap("assets/Others/AgentPlume1.png");
 	if (!player_asset) std::cerr << "ERROR: asset load failed: assets/others/AgentPlume1.png" << std::endl;
+
+	trap_asset = al_load_bitmap("assets/Animated/trap_animateds.png")
 
 	fat.setSprite(player_asset);
 }
@@ -52,7 +55,7 @@ void WorldMap::loadMap()
 	
 	// prepare tile
 	WorldTile wt;
-
+	Object obj;
 	// read map by char
 	for (int i = 0; i < size_y; i++) {
 		std::getline(file, line);
@@ -60,26 +63,40 @@ void WorldMap::loadMap()
 			switch (c) {
 			case 'W':
 				wt.type = TILE_TYPE_WALL;
-				std::cout << "wall" << std::endl;
+				//std::cout << "wall" << std::endl;
+				world_map.push_back(wt);
 				break;
 
 			case '.':
 				wt.type = TILE_TYPE_AIR;
+				world_map.push_back(wt);
 				break;
 
 			case '_':
 				wt.type = TILE_TYPE_FLOOR;
+				world_map.push_back(wt);
 				break;
 			
 			case 'P':
 				wt.type = TILE_TYPE_PLAYER_SPAWN_FAT;
+				world_map.push_back(wt);
 				break;
 
 			case 'p':
 				wt.type = TILE_TYPE_PLAYER_SPAWN_SLIM;
+				world_map.push_back(wt);
 				break;
+
+			case 'T':
+				obj = Trap(); // TODO put it in place
+				
+				this->objects.push_back(obj);
+				break;
+
+			case 'X':
+				obj = Exit(); // TODO put it in place 
 			}
-			world_map.push_back(wt);
+			
 		}
 	}
 	

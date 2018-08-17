@@ -26,6 +26,8 @@ enum WORLD_TILE_TYPE {
 	TILE_TYPE_PLAYER_SPAWN_FAT,
 	TILE_TYPE_PLAYER_SPAWN_SLIM,
 
+	TILE_TYPE_TRAP,
+	TILE_TYPE_EXIT
 };
 
 class WorldTile
@@ -46,9 +48,11 @@ private:
 	int size_x;
 	int size_y;
 	std::string path_to_map;
-	std::vector<WorldTile> world_map; 
 	std::vector<ALLEGRO_BITMAP*> assets; // !slow? want contigous memory
 	
+	std::vector<WorldTile> world_map; 
+	std::vector<Object> objects;
+
 	void loadMap();
 public:
 	WorldMap();
@@ -75,6 +79,7 @@ public:
 	WorldMap worldMap;
 	Actor fat;
 	ALLEGRO_BITMAP* player_asset;
+	ALLEGRO_BITMAP* trap_asset;
 
 	Environment();
 	~Environment();

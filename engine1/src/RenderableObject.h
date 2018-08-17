@@ -17,7 +17,13 @@ extern ALLEGRO_FONT* base_font;
 extern Actor;
 extern WorldMap;
 
-class RenderableObject
+class Object
+{
+public:
+	virtual void update();
+}
+
+class RenderableObject : public Object
 {
 protected:
 	ALLEGRO_BITMAP* empty_sprite;
@@ -48,24 +54,30 @@ public:
 	~RenderableObject();
 
 	virtual void render(Camera* camP);
-};
+	virtual void setSprinte(ALLEGRO_BITMAP* spriteP);
 
-class Collider
+virtual class Collider : public Object
 {
 protected:
+
+	typedef struct {
+		float min_x;
+		float max_x;
+		float min_y;
+		float max_y
+	} BoundingBox;
 
 public:
 
 	Collider();
 	~Collider();
 
-	virtual bool collide(Actor a);
-	virtual bool collide(WorldMap map);
-	virtual bool collide(GameObject obj); // TODO implement GameObject
+	virtual bool collide(Collider col);
 
 };
 
-class GameObject {
+virtual class GameObject : Object
+{
 protected:
 
 public:
@@ -73,7 +85,5 @@ public:
 	GameObject();
 	~GameObject();
 
-	virtual void effect(Actor a);
-	virtual void effect(WorldMap map);
 	virtual void effect(GameObject obj); 
 };

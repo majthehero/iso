@@ -161,6 +161,8 @@ void GameSystem::update(float deltaT)
 	// update actor physics
 	world->fat.update(deltaT);
 
+	// update objects
+
 	// send render command
 	msg.setDest(SYS_RENDER);
 	msg.setComm(CMD_RENDER);
