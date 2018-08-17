@@ -7,9 +7,21 @@ class Trap :
 	public WORLD_ACCESS
 {
 
+public:
 	Trap() 
 	{
 		this->spriteP = this->world.trap_asset;
+	}
+
+	Trap(float pos_x, float pos_y) 
+	{
+		Trap();
+		this->world_position.x = pos_x;
+		this->world_position.y = pos_y;
+		this->sprite_size.first = 64;
+		this->sprite_size.second = 64;
+		this->sprite_scale.first = 1.0;
+		this->sprite_scale.second = 1.0;s
 	}
 
 	// renderable object overrides

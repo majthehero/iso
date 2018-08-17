@@ -1,7 +1,8 @@
 #include "World.h"
 
 #include <iostream>
-
+#include "game_object/Trap.h"
+#include "game_object/Exit.h"
 
 // environment
 
@@ -12,7 +13,7 @@ Environment::Environment()
 	player_asset = al_load_bitmap("assets/Others/AgentPlume1.png");
 	if (!player_asset) std::cerr << "ERROR: asset load failed: assets/others/AgentPlume1.png" << std::endl;
 
-	trap_asset = al_load_bitmap("assets/Animated/trap_animateds.png")
+	trap_asset = al_load_bitmap("assets/Animated/trap_animateds.png");
 
 	fat.setSprite(player_asset);
 }

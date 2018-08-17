@@ -14,14 +14,12 @@
 
 extern ALLEGRO_FONT* base_font;
 
-extern Actor;
-extern WorldMap;
 
 class Object
 {
 public:
 	virtual void update();
-}
+};
 
 class RenderableObject : public Object
 {
@@ -29,7 +27,7 @@ protected:
 	ALLEGRO_BITMAP* empty_sprite;
 	ALLEGRO_COLOR backC;
 	ALLEGRO_COLOR fontC;
-	
+
 	typedef struct {
 		bool render;
 		bool devel; // will render id on object
@@ -56,16 +54,20 @@ public:
 	virtual void render(Camera* camP);
 	virtual void setSprinte(ALLEGRO_BITMAP* spriteP);
 
-virtual class Collider : public Object
+};
+
+class Collider : public Object
 {
-protected:
+public:
 
 	typedef struct {
 		float min_x;
 		float max_x;
 		float min_y;
-		float max_y
+		float max_y;
 	} BoundingBox;
+
+	BoundingBox boundingBox;
 
 public:
 
@@ -76,7 +78,7 @@ public:
 
 };
 
-virtual class GameObject : Object
+class GameObject : Object
 {
 protected:
 

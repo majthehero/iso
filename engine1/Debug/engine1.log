@@ -1,0 +1,10 @@
+﻿  Actor.cpp
+  main.cpp
+  RenderableObject.cpp
+  RenderSystem.cpp
+  System.cpp
+  World.cpp
+c:\dev\pgj18\code\iso\engine1\src\world.cpp(17): error C2146: syntax error: missing ';' before identifier 'fat'
+c:\dev\pgj18\code\iso\engine1\src\world.cpp(91): error C3861: 'Trap': identifier not found
+c:\dev\pgj18\code\iso\engine1\src\world.cpp(97): error C3861: 'Exit': identifier not found
+  Generating Code...

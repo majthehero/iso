@@ -42,12 +42,12 @@ public:
 
 	// collider
 
-	void collide(Collider col)
+	bool collide(Collider* col)
 	{
-		if (this.max_x > col.min_x &&
-			this.min_x < col.max_x &&
-			this.max_y > col.min_y &&
-			this.min_y < col.min_y)
+		if (this->boundingBox.max_x > col->boundingBox.min_x &&
+			this->boundingBox.min_x < col->boundingBox.max_x &&
+			this->boundingBox.max_y > col->boundingBox.min_y &&
+			this->boundingBox.min_y < col->boundingBox.min_y)
 		{
 			return true;
 		}
