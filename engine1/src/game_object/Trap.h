@@ -55,16 +55,16 @@ public:
 				destScale, destScale,	// dest scale
 				NULL);
 
-		if (flags.devel) {
-			char coords_str[20];
-			sprintf_s(coords_str, 12, "Trap: %d,%d ", (int)ws_pos_x, (int)ws_pos_y);
-			if (!coords_str) sprintf_s(coords_str, 20, "err");
-			al_draw_text(base_font, fontC,
-				itemPosSP.x,		// dest x
-				itemPosSP.y,			//  y
-				NULL,				// flags
-				coords_str);		// text c string
-		}
+		//if (flags.devel) {
+		//	char coords_str[20];
+		//	sprintf_s(coords_str, 12, "Trap: %d,%d ", (int)ws_pos_x, (int)ws_pos_y);
+		//	if (!coords_str) sprintf_s(coords_str, 20, "err");
+		//	al_draw_text(base_font, fontC,
+		//		itemPosSP.x,		// dest x
+		//		itemPosSP.y,			//  y
+		//		NULL,				// flags
+		//		coords_str);		// text c string
+		//}
 	};
 
 	void setSprite(ALLEGRO_BITMAP* spriteP) override

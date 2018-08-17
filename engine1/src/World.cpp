@@ -2,34 +2,6 @@
 
 #include "World.h"
 
-// environment
-
-Environment::Environment()
-{
-	printf("Environment constructor. Loading assets.");
-	
-	player_asset = al_load_bitmap("assets/Others/AgentPlume1.png");
-	if (!player_asset) 
-		std::cerr << "ERROR: asset load failed: assets/others/AgentPlume1.png" << std::endl;
-
-	trap_asset = al_load_bitmap("assets/Animated/trap_animateds.png");
-
-	fat.setSprite(player_asset);
-}
-
-Environment::~Environment()
-{
-}
-
-WorldMap& Environment::getMap()
-{
-	return worldMap;
-}
-
-Camera * Environment::getCamera()
-{
-	return & this->fat.camera;
-}
 
 // world map
 
@@ -56,7 +28,14 @@ void WorldMap::loadMap()
 	WorldTile* wtP = new WorldTile();
 	Trap* trapP = new Trap();
 	Exit* exitP = new Exit();
-	// THIS IS A MEMORY LEAK - MUST DELETE THOSE TWO OF WT; TRAP; EXIT NOT USED
+	// cleanup flags
+	bool delwt = true;
+	bool deltrap = true;
+	bool delexit = true;
+
+	// player start position
+	float playerstart_x;
+	float playerstart_y;
 
 	// read map by char
 	for (int i = 0; i < size_y; i++) {
@@ -64,53 +43,93 @@ void WorldMap::loadMap()
 		for (char c : line) {
 			switch (c) {
 			case 'W':
-				
+
+				delwt = false;
 				wtP->type = TILE_TYPE_WALL;
 				world_map.push_back(wtP);
 				break;
 
 			case '.':
-				
+
+				delwt = false;
 				wtP->type = TILE_TYPE_AIR;
 				world_map.push_back(wtP);
 				break;
 
 			case '_':
-				
+
+				delwt = false;
 				wtP->type = TILE_TYPE_FLOOR;
 				world_map.push_back(wtP);
 				break;
 			
 			case 'P':
-				
+				playerstart_x = (float)(i % this->size_x);
+				playerstart_y = (float)(i / this->size_y);
+
+				std::cout << "PLAYER START " << playerstart_x << " : " << playerstart_y << std::endl;
+
+				world->fat.world_position.x = playerstart_x;
+				world->fat.world_position.y = playerstart_y;
+
+				delwt = false;
 				wtP->type = TILE_TYPE_PLAYER_SPAWN_FAT;
 				world_map.push_back(wtP);
+				
 				break;
 
 			case 'p':
-				
+
+				trapP->world_position.x = (float)(i % this->size_x);
+				trapP->world_position.y = (float)(i / this->size_y);
+
+				std::cout << "TRAP " << trapP->world_position.x << " : " <<
+					trapP->world_position.y << std::endl;
+
+
+				delwt = false;
 				wtP->type = TILE_TYPE_PLAYER_SPAWN_SLIM;
 				world_map.push_back(wtP);
 				break;
 
 			case 'T':
 
+				deltrap = false;
 				trapP->world_position.x = (float)(i % this->size_x);
 				trapP->world_position.y = (float) (i / this->size_y);
+
+				std::cout << "TRAP " << trapP->world_position.x << " : " <<
+					trapP->world_position.y << std::endl;
 
 				this->objects.push_back((Object*)trapP);
 				break;
 
 			case 'X':
 
-				trapP->world_position.x = (float)(i % this->size_x);
-				trapP->world_position.y = (float)(i / this->size_y);
+				std::cout << "TRAP " << trapP->world_position.x << " : " <<
+					trapP->world_position.y << std::endl;
 
-				this->objects.push_back((Object*)trapP);
+				delexit = false;
+				exitP->world_position.x = (float)(i % this->size_x);
+				exitP->world_position.y = (float)(i / this->size_y);
+
+				this->objects.push_back((Object*)exitP);
 				break;
 			}
-			
+
+/*
+			if (delwt) std::cout << "Tile: " << (int)wtP->type << std::endl;
+			if (delexit) std::cout << "Exit: " << exitP->world_position.x << " : "
+				<< exitP->world_position.y << std::endl;
+			if (deltrap) std::cout << "Trap: " << trapP->world_position.x << " : "
+				<< trapP->world_position.y << std::endl;*/
 		}
+
+
+		// cleanup
+		/*if (delwt) delete wtP;
+		if (deltrap) delete trapP;
+		if (delexit) delete exitP;*/
 	}
 	
 	for (WorldTile* wt : world_map) {
@@ -151,9 +170,8 @@ WorldMap::WorldMap()
 	// !placeholder: path to map - probably multiple maps, hot load
 	path_to_map = "assets/others/level0.map";
 	
-	//clear map and load from file
+	//clear map
 	world_map.clear();
-	loadMap();
 		
 }
 
@@ -255,3 +273,39 @@ void WORLD_ACCESS::assignWorld(Environment* w)
 	world = w;
 }
 
+
+
+
+// environment
+
+Environment::Environment()
+{
+	printf("Environment constructor. Loading assets.");
+
+	player_asset = al_load_bitmap("assets/Others/AgentPlume1.png");
+	if (!player_asset)
+		std::cerr << "ERROR: asset load failed: assets/others/AgentPlume1.png" << std::endl;
+
+	trap_asset = al_load_bitmap("assets/Animated/trap_animateds.png");
+	if (!trap_asset)
+		std::cout << "ERROR: asset load failed: assets/Animated/trap_animated.png" << std::endl;
+
+	fat.setSprite(player_asset);
+
+	worldMap.assignWorld(this);
+	worldMap.loadMap();
+}
+
+Environment::~Environment()
+{
+}
+
+WorldMap& Environment::getMap()
+{
+	return worldMap;
+}
+
+Camera * Environment::getCamera()
+{
+	return &this->fat.camera;
+}

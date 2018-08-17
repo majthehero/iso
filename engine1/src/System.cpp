@@ -1,3 +1,5 @@
+#pragma once
+
 #include "System.h"
 
 
@@ -157,6 +159,8 @@ void GameSystem::update(float deltaT)
 		}
 
 	}
+
+
 
 	// update actor physics
 	world->fat.update(deltaT);

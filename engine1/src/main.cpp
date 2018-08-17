@@ -43,7 +43,8 @@ int main()
 	
 	// world needs allegro to construct itself
 	
-	Environment world = Environment();
+
+	Environment world;
 	gameSystem.assignWorld(&world);
 	renderSystem.assignWorld(&world);
 		

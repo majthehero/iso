@@ -42,11 +42,22 @@ public:
 };
 
 
+// for SYSTEMS
+class WORLD_ACCESS {
+public:
+	Environment* world;  // !todo: replace pointer with something a bit smarter
+public:
+	void assignWorld(Environment* w);
+};
+
+
 // WorldMap
 
-class WorldMap : public RenderableObject
+class WorldMap : 
+	public RenderableObject,
+	public WORLD_ACCESS
 {
-private:
+public:
 
 	int size_x;
 	int size_y;
@@ -97,13 +108,4 @@ public:
 	WorldMap& getMap();
 	Camera* getCamera();
 
-};
-
-
-// for SYSTEMS
-class WORLD_ACCESS {
-protected:
-	Environment* world;  // !todo: replace pointer with something a bit smarter
-public:
-	void assignWorld(Environment* w);
 };

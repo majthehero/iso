@@ -8,8 +8,12 @@ Actor::Actor()
 {
 	this->camera = Camera();
 	this->camera.setScale(1.0);
-	this->camera.setPosition(this->world_position.x,
-							 this->world_position.y);
+	this->camera.setPosition(this->world_position.x + 3.0,
+							 this->world_position.y + 3.0);
+
+	this->flags.render = true;
+	this->flags.devel = true;
+
 }
 
 Actor::~Actor()
@@ -26,15 +30,33 @@ void Actor::setSprite(ALLEGRO_BITMAP* spriteP)
 void Actor::update(float deltaT)
 {
 	// gravity
-	this->momentum_y += 0.1 * deltaT;
+	this->momentum_y -= 0.1 * deltaT;
 
-	printf("Update: moment: %f %f\n", this->momentum_x, this->momentum_y);
-	printf("Update: position: %f %f\n", this->world_position.x, this->world_position.y);
+	// energy loss
+	this->momentum_x *= 0.9 * deltaT;
+
+	// stop momentum if colission
+	if (this->down_touch && this->momentum_y >= 0.0) 
+		this->momentum_y = 0.0;
+	
+	if (this->top_touch && this->momentum_y <= 0.0)
+		this->momentum_y = 0.0;
+
+	if (this->left_touch && this->momentum_x <= 0.0)
+		this->momentum_x = 0.0;
+
+	if (this->right_touch && this->momentum_x >= 0.0)
+		this->momentum_x = 0.0;
+	
+	// update position
 	this->world_position.x += this->momentum_x * deltaT;
 	this->world_position.y += this->momentum_y * deltaT;
 
-	this->camera.setPosition(this->world_position.x,
-		this->world_position.y);
+	// update camera
+	this->camera.setPosition(-3.0, -3.0);
+
+	//this->camera.setPosition(this->world_position.x,
+		//this->world_position.y);
 }
 
 // renderble
@@ -58,16 +80,16 @@ void Actor::render(Camera* camP)
 			destScale, destScale,	// dest scale
 			NULL);
 
-	if (flags.devel) {
-		char coords_str[20];
-		sprintf_s(coords_str, 12, "Actor: %d,%d ", (int)ws_pos_x, (int)ws_pos_y);
-		if (!coords_str) sprintf_s(coords_str, 20, "err");
-		al_draw_text(base_font, fontC,
-			itemPosSP.x,		// dest x
-			itemPosSP.y,			//  y
-			NULL,				// flags
-			coords_str);		// text c string
-	}
+	//if (flags.devel) {
+	//	char coords_str[20];
+	//	sprintf_s(coords_str, 20, "Actor: %3d,%3d", (int)ws_pos_x, (int)ws_pos_y);
+	//	if (!coords_str) sprintf_s(coords_str, 20, "err");
+	//	al_draw_text(base_font, fontC,
+	//		itemPosSP.x,		// dest x
+	//		itemPosSP.y,			//  y
+	//		NULL,				// flags
+	//		coords_str);		// text c string
+	//}
 }
 
 // collider
